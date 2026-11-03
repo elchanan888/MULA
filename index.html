@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2864e8">
+  <meta name="description" content="ממשק נוח לניהול WooCommerce: מוצרים, הזמנות, קטגוריות ונתוני מכירות">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="מנהל החנות">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <title>ניהול מוצרים · WooCommerce</title>
+  <style>
+    :root{--bg:#f7f8fa;--surface:#fff;--text:#182230;--muted:#667085;--line:#e5e9ef;--primary:#2864e8;--primary-dark:#1d4fc1;--primary-soft:#edf3ff;--green:#16835d;--green-bg:#eaf8f1;--red:#c43232;--red-bg:#fff0f0;--amber:#8a5c00;--amber-bg:#fff7df;--shadow:0 8px 28px rgba(22,34,51,.06);--radius:16px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Heebo",sans-serif;font-size:15px;line-height:1.5}button,input,textarea{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}a{color:var(--primary)}
+    .app{min-height:100vh}.topbar{height:76px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:15}.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:18px}.brand-mark{width:38px;height:38px;display:grid;place-items:center;background:var(--primary);color:white;border-radius:12px;font-size:19px;box-shadow:0 5px 14px #2864e82d}.brand small{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-top:-2px}.top-actions{display:flex;align-items:center;gap:10px}.connection-pill{font-size:12px;font-weight:700;padding:7px 11px;border-radius:99px;background:#f0f2f5;color:#687385;display:flex;align-items:center;gap:7px}.connection-pill:before{content:"";width:7px;height:7px;border-radius:50%;background:#98a2b3}.connection-pill.ok{background:var(--green-bg);color:var(--green)}.connection-pill.ok:before{background:#20a36d}.mobile-menu{display:none}
+    .layout{display:grid;grid-template-columns:240px minmax(0,1fr);max-width:1600px;margin:auto;min-height:calc(100vh - 76px)}.sidebar{background:#fff;border-left:1px solid var(--line);padding:26px 16px;display:flex;flex-direction:column;gap:7px}.nav-label{color:#98a2b3;font-size:11px;font-weight:800;letter-spacing:.05em;padding:0 13px;margin:3px 0 8px}.nav-button{border:0;background:transparent;text-align:right;padding:12px 13px;border-radius:10px;color:#5d6878;display:flex;align-items:center;gap:12px;width:100%;font-weight:650;transition:background .15s,color .15s}.nav-button .nav-icon{width:22px;text-align:center;font-size:18px}.nav-button:hover{background:#f6f8fb;color:var(--text)}.nav-button.active{background:var(--primary-soft);color:var(--primary)}.sidebar-bottom{margin-top:auto}.sidebar-note{padding:14px;border:1px solid var(--line);border-radius:12px;color:var(--muted);font-size:12px;line-height:1.65;background:#fbfcfe}.sidebar-note strong{display:block;color:var(--text);margin-bottom:4px}
+    main{padding:28px 32px 52px;min-width:0;max-width:1240px;width:100%;margin:0 auto}.view{display:none}.view.active{display:block}.page-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:25px}.page-heading h1{font-size:26px;letter-spacing:-.5px;margin:0 0 5px}.page-heading p{margin:0;color:var(--muted)}.heading-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+    .btn{border:1px solid transparent;border-radius:10px;padding:10px 15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:13px;transition:all .15s;white-space:nowrap}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}.btn-secondary{background:#fff;border-color:var(--line);color:#344054}.btn-secondary:hover{background:#f7f9fc;border-color:#ccd4df}.btn-ghost{background:transparent;color:#526071}.btn-danger{background:var(--red-bg);color:var(--red);border-color:#ffd9d9}.btn-danger:hover{background:#ffe4e4}.btn-sm{padding:7px 10px;font-size:12px;border-radius:8px}.btn-icon{width:36px;height:36px;padding:0;border:1px solid var(--line);background:white;border-radius:9px;display:inline-grid;place-items:center;color:#586579;font-size:17px}.btn-icon:hover{background:#f5f7fa}.full{width:100%}
+    .welcome-banner{border:1px solid #cfddff;background:linear-gradient(115deg,#f1f5ff 0%,#fff 77%);padding:23px 25px;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:22px;margin-bottom:23px}.welcome-copy h2{margin:0 0 7px;font-size:19px}.welcome-copy p{margin:0;color:#5d6b80;max-width:620px;font-size:13px}.welcome-illustration{font-size:43px;flex-shrink:0}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:26px}.stat-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px}.stat-top{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px}.stat-icon{width:35px;height:35px;border-radius:10px;background:#f2f5fa;display:grid;place-items:center;font-size:17px}.stat-number{font-size:27px;font-weight:800;letter-spacing:-.4px;margin-top:8px}.stat-sub{font-size:11px;color:#98a2b3;margin-top:1px}
+    .product-toolbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:16px;flex-wrap:wrap}.product-toolbar h2{font-size:17px;margin:0}.product-count{color:var(--muted);font-size:12px;margin-top:3px}.searchbox{position:relative;min-width:230px;max-width:340px;flex:1}.searchbox span{position:absolute;right:12px;top:9px;color:#98a2b3;font-size:17px}.searchbox input{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 37px 10px 13px;outline:none;font-size:13px}.searchbox input:focus,.field input:focus,.field textarea:focus{border-color:#8baeff;box-shadow:0 0 0 3px #2864e812}.product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}.product-card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:box-shadow .15s,transform .15s;min-width:0}.product-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}.product-image-wrap{height:185px;background:#f5f7fa;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}.product-image{width:100%;height:100%;object-fit:contain;display:block}.image-placeholder{display:flex;flex-direction:column;align-items:center;gap:7px;color:#a6afbd;font-size:12px}.image-placeholder b{font-size:34px;font-weight:400}.type-pill{position:absolute;top:11px;right:11px;background:#ffffffed;border:1px solid #e6eaf1;border-radius:7px;padding:4px 7px;font-size:10px;font-weight:750;color:#5e6a7d;backdrop-filter:blur(5px)}.product-card-body{padding:15px 16px}.product-name{font-size:15px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 0 6px}.product-description{height:37px;overflow:hidden;font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.product-card-bottom{border-top:1px solid #f0f2f5;padding-top:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}.product-price{font-weight:800;font-size:16px;white-space:nowrap}.product-price small{font-size:10px;color:var(--muted);font-weight:500}.product-actions{display:flex;align-items:center;gap:6px}.empty-state{background:#fff;border:1px dashed #d5dce6;border-radius:16px;padding:55px 20px;text-align:center;grid-column:1/-1}.empty-icon{font-size:42px;margin-bottom:12px}.empty-state h3{margin:0 0 7px;font-size:17px}.empty-state p{margin:0 0 17px;color:var(--muted);font-size:13px}.loading-panel{border:1px solid var(--line);background:#fff;border-radius:14px;padding:35px;text-align:center;color:var(--muted);grid-column:1/-1}.spinner{display:inline-block;width:20px;height:20px;border:2px solid #d8e2f8;border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-left:8px}@keyframes spin{to{transform:rotate(360deg)}}
+    .product-meta{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px}.meta-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid #e7ebf2;background:#f8fafc;color:#526071;border-radius:6px;padding:3px 7px;font-size:10px;max-width:100%;overflow-wrap:anywhere}.meta-chip.sku{background:#f1f5ff;border-color:#dce7ff;color:#3156a7}.category-selector{display:flex;flex-wrap:wrap;gap:8px;max-height:180px;overflow:auto;padding:10px;border:1px solid #e1e6ed;border-radius:10px;background:#fbfcfe}.category-check{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid #e0e6ee;border-radius:8px;padding:7px 10px;font-size:12px;color:#344054;cursor:pointer}.category-check input{width:15px;height:15px;padding:0;margin:0;accent-color:var(--primary)}.category-empty{padding:15px;color:var(--muted);font-size:12px;border:1px dashed #d4dce7;border-radius:9px;width:100%}.category-list{display:flex;flex-direction:column;gap:9px}.category-row{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:#fff}.category-info{min-width:0;display:flex;align-items:center;gap:12px}.category-symbol{flex:0 0 38px;width:38px;height:38px;border-radius:10px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-size:18px}.category-name{font-size:14px;font-weight:750;overflow-wrap:anywhere}.category-details{font-size:11px;color:var(--muted);margin-top:3px}.category-actions{display:flex;align-items:center;gap:6px;flex:0 0 auto}.category-actions .btn-icon{width:32px;height:32px}.category-toolbar{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}.category-toolbar .field{flex:1;min-width:200px}.category-last-sync{font-size:11px;color:var(--muted);margin-top:4px}.category-count-pill{font-size:11px;background:#f3f5f8;color:#667085;border-radius:20px;padding:5px 9px;white-space:nowrap}
+    .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:23px;margin-bottom:18px}.panel-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:19px}.panel-heading h2{font-size:17px;margin:0 0 5px}.panel-heading p{font-size:12px;color:var(--muted);margin:0}.section-tag{font-size:11px;background:#f3f5f8;color:#687385;padding:5px 8px;border-radius:7px;font-weight:700}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px 20px}.field{display:flex;flex-direction:column;gap:7px;min-width:0}.field.full-row{grid-column:1/-1}.field label{font-weight:750;font-size:12px;color:#344054}.field .optional{font-weight:400;color:#98a2b3;margin-right:4px}.field input,.field textarea{width:100%;padding:11px 12px;border:1px solid #dce2e9;background:#fff;border-radius:9px;outline:none;color:var(--text);font-size:13px;transition:border .15s,box-shadow .15s;min-width:0}.field textarea{min-height:110px;resize:vertical}.field small,.hint{font-size:11px;color:var(--muted);line-height:1.6}.input-with-action{display:flex;gap:8px}.input-with-action input{flex:1;min-width:0}.alert{border-radius:11px;padding:13px 15px;font-size:12px;line-height:1.7;display:flex;align-items:flex-start;gap:10px;margin:17px 0}.alert .alert-icon{font-size:16px;flex:0 0 auto}.alert.info{background:#eef4ff;color:#294d91;border:1px solid #dce7ff}.alert.warning{background:var(--amber-bg);color:#79530c;border:1px solid #ffe9a5}.alert.success{background:var(--green-bg);color:#176b4e;border:1px solid #cbf0dd}.alert.danger{background:var(--red-bg);color:#962f2f;border:1px solid #ffd9d9}.settings-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:20px}.settings-footer .right{display:flex;gap:8px;flex-wrap:wrap}
+    .steps{display:grid;grid-template-columns:1fr 1fr;gap:14px}.step-card{border:1px solid var(--line);border-radius:13px;padding:17px;display:flex;gap:13px;align-items:flex-start;background:#fff}.step-number{width:30px;height:30px;background:var(--primary-soft);color:var(--primary);border-radius:9px;display:grid;place-items:center;font-weight:800;flex-shrink:0}.step-card h3{font-size:13px;margin:2px 0 6px}.step-card p{font-size:12px;color:var(--muted);margin:0;line-height:1.7}.step-card code{font-size:11px;background:#f3f5f8;padding:2px 5px;border-radius:4px;direction:ltr;unicode-bidi:embed}.help-list{padding-right:19px;margin:7px 0 0;color:var(--muted);font-size:12px;line-height:1.9}.modal-backdrop{position:fixed;inset:0;background:#1520338a;z-index:40;display:none;align-items:center;justify-content:center;padding:18px;overflow-y:auto}.modal-backdrop.open{display:flex}.modal{width:min(680px,100%);background:#fff;border-radius:18px;box-shadow:0 24px 80px #10182845;max-height:calc(100vh - 36px);overflow:auto}.modal-header{display:flex;justify-content:space-between;align-items:flex-start;padding:22px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:2}.modal-header h2{font-size:19px;margin:0 0 4px}.modal-header p{font-size:12px;margin:0;color:var(--muted)}.modal-body{padding:22px 24px}.modal-footer{border-top:1px solid var(--line);padding:16px 24px;display:flex;justify-content:space-between;gap:10px;align-items:center;position:sticky;bottom:0;background:#fff}.modal-footer .actions{display:flex;gap:8px}.image-picker{display:flex;gap:15px;align-items:center;border:1px dashed #cbd5e1;background:#fafbfd;padding:13px;border-radius:11px}.image-preview{width:94px;height:94px;border:1px solid var(--line);border-radius:9px;background:#fff;object-fit:contain;flex-shrink:0}.image-picker-actions{display:flex;flex-direction:column;align-items:flex-start;gap:7px}.image-picker-actions p{margin:0;color:var(--muted);font-size:11px}.currency-input{position:relative}.currency-input input{padding-left:45px}.currency-input span{position:absolute;left:13px;top:9px;color:#667085;font-weight:700}.modal-hint{font-size:11px;color:var(--muted);margin-top:7px}.toast-container{position:fixed;left:20px;bottom:20px;z-index:100;display:flex;flex-direction:column;gap:8px;max-width:min(420px,calc(100vw - 40px))}.toast{padding:13px 16px;background:#172230;color:white;border-radius:11px;box-shadow:0 8px 28px #1722302b;font-size:13px;display:flex;align-items:flex-start;gap:9px;animation:toastIn .18s ease-out}.toast.error{background:#9f2929}.toast.success{background:#176b4e}@keyframes toastIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}.no-scroll{overflow:hidden}.hidden{display:none!important}.required{color:var(--red)}
+    @media(max-width:1100px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:210px minmax(0,1fr)}main{padding:25px 22px 40px}.topbar{padding:0 22px}}
+    @media(max-width:760px){.topbar{height:65px;padding:0 15px}.mobile-menu{display:inline-grid}.brand{font-size:16px;gap:9px}.brand-mark{width:34px;height:34px}.top-actions{gap:6px}.connection-pill{padding:6px 8px;font-size:10px}.layout{display:block;min-height:calc(100vh - 65px)}.sidebar{display:none;position:fixed;top:65px;right:0;bottom:0;width:260px;z-index:30;box-shadow:-10px 0 32px #15203320;border-left:1px solid var(--line)}.sidebar.mobile-open{display:flex}.sidebar-scrim{position:fixed;inset:65px 0 0;background:#15203355;z-index:25;display:none}.sidebar-scrim.open{display:block}main{padding:22px 15px 36px}.page-heading{flex-direction:column;align-items:stretch;margin-bottom:21px}.page-heading h1{font-size:23px}.heading-actions{width:100%}.heading-actions .btn{flex:1}.stats{gap:9px;grid-template-columns:repeat(3,minmax(0,1fr))}.stat-card{padding:13px 12px}.stat-number{font-size:22px}.stat-icon{width:29px;height:29px}.stat-top{font-size:10px}.stat-sub{font-size:10px}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.product-image-wrap{height:140px}.product-card-body{padding:12px}.product-name{font-size:13px}.product-description{font-size:11px;height:34px}.product-price{font-size:14px}.product-actions{gap:4px}.btn-sm{padding:6px 8px;font-size:11px}.welcome-banner{padding:18px;align-items:flex-start}.welcome-illustration{font-size:31px}.welcome-copy h2{font-size:17px}.welcome-copy p{font-size:12px}.form-grid{grid-template-columns:1fr;gap:14px}.field.full-row{grid-column:auto}.steps{grid-template-columns:1fr}.panel{padding:18px}.panel-heading{margin-bottom:15px}.product-toolbar{align-items:stretch}.searchbox{max-width:none;min-width:100%;order:3}.image-preview{width:78px;height:78px}.image-picker{gap:10px}.modal-header{padding:18px}.modal-body{padding:18px}.modal-footer{padding:14px 18px}.modal-footer .actions .btn{padding:9px 11px}.modal-footer .btn-danger{font-size:0}.modal-footer .btn-danger span{font-size:15px}}
+    @media(max-width:390px){.product-grid{grid-template-columns:1fr}.product-image-wrap{height:190px}.stats{grid-template-columns:1fr}.stat-card{display:flex;justify-content:space-between;align-items:center}.stat-number{margin:0}.product-card-body{padding:14px}.product-actions .btn{font-size:12px;padding:7px 9px}.connection-pill{display:none}}
+
+    /* Dashboard, orders, settings transfer and PWA */
+    .analytics-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .analytics-columns{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,1fr);gap:16px;align-items:start}
+    .filter-select{border:1px solid var(--line);border-radius:10px;background:#fff;color:#344054;padding:10px 12px;font:inherit;font-size:13px;min-width:145px;max-width:100%}
+    .sales-chart{display:flex;flex-direction:column;gap:10px;min-height:175px;padding:8px 2px}
+    .sales-bar-row{display:grid;grid-template-columns:78px minmax(40px,1fr) 100px;align-items:center;gap:10px;font-size:11px;color:var(--muted)}
+    .sales-bar-track{height:12px;border-radius:99px;background:#edf1f7;overflow:hidden}
+    .sales-bar-fill{height:100%;background:linear-gradient(90deg,#85a9ff,#2864e8);border-radius:99px;min-width:2px}
+    .sales-bar-value{text-align:left;font-weight:750;color:#344054;font-variant-numeric:tabular-nums}
+    .top-sellers{display:flex;flex-direction:column;gap:0}
+    .seller-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid #f0f2f5;font-size:13px}
+    .seller-row:last-child{border-bottom:0}.seller-name{font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.seller-qty{background:var(--primary-soft);color:#3156a7;border-radius:20px;padding:4px 9px;font-size:11px;white-space:nowrap}
+    .status-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}
+    .status-chip{display:flex;justify-content:space-between;gap:8px;padding:11px 12px;border-radius:10px;background:#f8fafc;border:1px solid #edf0f4;font-size:12px}.status-chip b{font-variant-numeric:tabular-nums}
+    .orders-toolbar-panel{padding:15px 18px}.orders-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.orders-toolbar .searchbox{max-width:520px}.orders-count{font-size:11px;color:var(--muted);margin-top:9px}
+    .orders-table-panel{padding:0;overflow:hidden}.orders-table-wrap{width:100%;overflow:auto}.orders-table{width:100%;border-collapse:collapse;min-width:850px}.orders-table th{background:#f8fafc;color:#667085;font-size:11px;text-align:right;padding:13px 14px;white-space:nowrap;border-bottom:1px solid var(--line)}.orders-table td{padding:13px 14px;border-bottom:1px solid #f0f2f5;font-size:12px;vertical-align:middle}.orders-table tr:last-child td{border-bottom:0}.order-number{font-weight:800;color:#244fae}.order-customer{font-weight:700}.order-sub{color:var(--muted);font-size:10px;margin-top:3px;overflow-wrap:anywhere}.order-total{font-weight:800;white-space:nowrap}.order-status-select{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 8px;font:inherit;font-size:11px;max-width:130px}.order-actions-cell{white-space:nowrap}.transfer-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.hint{font-size:12px;color:var(--muted);margin-top:9px}.order-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px}.order-detail-box{border:1px solid var(--line);border-radius:10px;padding:12px;background:#fbfcfe;min-width:0}.order-detail-box h4{margin:0 0 7px;font-size:12px}.order-detail-box p{margin:3px 0;color:#475467;font-size:12px;overflow-wrap:anywhere}.order-lines{width:100%;border-collapse:collapse;margin:12px 0}.order-lines td,.order-lines th{padding:9px;border-bottom:1px solid #edf0f4;text-align:right;font-size:12px}.order-lines th{color:var(--muted);font-weight:700}.order-detail-total{display:flex;justify-content:space-between;font-weight:800;padding:7px 0}.pwa-note{font-size:12px;color:var(--muted)}
+    @media(max-width:1100px){.analytics-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.analytics-columns{grid-template-columns:1fr}}
+    @media(max-width:640px){.analytics-kpis{grid-template-columns:1fr 1fr;gap:9px}.analytics-kpis .stat-card{padding:13px}.analytics-kpis .stat-number{font-size:21px}.sales-bar-row{grid-template-columns:65px minmax(30px,1fr) 78px;gap:7px}.order-detail-grid{grid-template-columns:1fr}.orders-toolbar .searchbox{min-width:100%}.filter-select{width:100%}.transfer-actions .btn{flex:1 1 145px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="btn-icon mobile-menu" id="mobileMenu" aria-label="פתיחת תפריט">☰</button>
+      <div class="brand"><div class="brand-mark">W</div><div>מנהל המוצרים<small>WooCommerce · ניהול חנות</small></div></div>
+    </div>
+    <div class="top-actions">
+      <span id="connectionPill" class="connection-pill">לא מחובר</span>
+      <button class="btn btn-secondary btn-sm hidden" id="installApp" type="button">＋ התקנת האפליקציה</button>
+      <button class="btn btn-secondary btn-sm" id="topSettings">⚙️ <span>הגדרות</span></button>
+    </div>
+  </header>
+  <div class="sidebar-scrim" id="sidebarScrim"></div>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="nav-label">תפריט ראשי</div>
+      <button class="nav-button active" data-view="dashboard"><span class="nav-icon">▥</span>לוח בקרה</button>
+      <button class="nav-button" data-view="orders"><span class="nav-icon">🧾</span>הזמנות וקניות</button>
+      <button class="nav-button" data-view="products"><span class="nav-icon">▦</span>המוצרים שלי</button>
+      <button class="nav-button" data-view="categories"><span class="nav-icon">▤</span>קטגוריות</button>
+      <button class="nav-button" data-view="help"><span class="nav-icon">ⓘ</span>הוראות חיבור והפעלה</button>
+      <button class="nav-button" data-view="settings"><span class="nav-icon">⚙</span>הגדרות וחיבור</button>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note"><strong>🔒 הנתונים שלך</strong>פרטי החיבור נשמרים ב־LocalStorage בדפדפן הזה. הם לא נכתבים לתוך קובץ ה־HTML.</div>
+      </div>
+    </aside>
+    <main>
+
+      <section id="dashboardView" class="view active">
+        <div class="page-heading"><div><h1>לוח בקרה</h1><p>תמונת מצב של המכירות, ההזמנות והמוצרים הנמכרים בחנות.</p><div class="category-last-sync" id="analyticsSyncLabel">נתוני המכירות ייטענו לאחר החיבור לחנות.</div></div><div class="heading-actions"><select id="analyticsPeriod" class="filter-select" aria-label="טווח נתוני מכירות"><option value="7">7 ימים אחרונים</option><option value="30" selected>30 ימים אחרונים</option><option value="90">90 ימים אחרונים</option><option value="365">12 חודשים אחרונים</option></select><button class="btn btn-secondary" id="refreshAnalytics">↻ רענון נתונים</button></div></div>
+        <div class="stats analytics-kpis">
+          <div class="stat-card"><div class="stat-top"><span>מכירות ברוטו</span><span class="stat-icon">₪</span></div><div class="stat-number" id="grossSales">—</div><div class="stat-sub">מחזור ברוטו לפי דוח WooCommerce</div></div>
+          <div class="stat-card"><div class="stat-top"><span>מכירות נטו</span><span class="stat-icon">↗</span></div><div class="stat-number" id="netSales">—</div><div class="stat-sub">לפי דוח המכירות הרשמי של החנות</div></div>
+          <div class="stat-card"><div class="stat-top"><span>הזמנות בתקופה</span><span class="stat-icon">🧾</span></div><div class="stat-number" id="periodOrders">—</div><div class="stat-sub">מספר ההזמנות בתקופה שנבחרה</div></div>
+          <div class="stat-card"><div class="stat-top"><span>ממוצע להזמנה</span><span class="stat-icon">◉</span></div><div class="stat-number" id="averageOrder">—</div><div class="stat-sub">מכירות נטו חלקי מספר הזמנות</div></div>
+          <div class="stat-card"><div class="stat-top"><span>פריטים שנמכרו</span><span class="stat-icon">▦</span></div><div class="stat-number" id="itemsSold">—</div><div class="stat-sub">כמות יחידות לפי דוח המכירות</div></div>
+          <div class="stat-card"><div class="stat-top"><span>לקוחות משלמים</span><span class="stat-icon">👤</span></div><div class="stat-number" id="payingCustomers">—</div><div class="stat-sub">סך כל הלקוחות המשלמים בחנות</div></div>
+        </div>
+        <div class="analytics-columns">
+          <div class="panel"><div class="panel-heading"><div><h2>מכירות לאורך התקופה</h2><p>חלוקה יומית לפי נתוני הדוח של WooCommerce.</p></div><span class="section-tag">₪</span></div><div id="salesChart" class="sales-chart"><div class="empty-state"><p>חבר את החנות כדי לטעון נתונים.</p></div></div></div>
+          <div class="panel"><div class="panel-heading"><div><h2>המוצרים הנמכרים ביותר</h2><p>על פי דוח המוצרים הנמכרים בתקופה.</p></div></div><div id="topSellers" class="top-sellers"><div class="loading-panel">הנתונים יופיעו אחרי החיבור.</div></div></div>
+        </div>
+        <div class="panel"><div class="panel-heading"><div><h2>מצב ההזמנות בחנות</h2><p>חלוקה לפי סטטוס — כלל ההזמנות, לא רק התקופה שנבחרה.</p></div><button class="btn btn-secondary btn-sm" data-go="orders">ניהול הזמנות ←</button></div><div id="orderStatusSummary" class="status-summary"><span class="muted">הנתונים יופיעו אחרי החיבור.</span></div></div>
+        <div class="alert info"><span class="alert-icon">ℹ️</span><div>נתוני המכירות נמשכים מדוחות WooCommerce. זמינותם תלויה בהרשאות REST API ובתוספים הפעילים בחנות. נתוני לקוחות מוצגים כסיכום בלבד; מידע אישי על לקוחות זמין במסך פרטי ההזמנה.</div></div>
+      </section>
+      <section id="ordersView" class="view">
+        <div class="page-heading"><div><h1>הזמנות וקניות</h1><p>צפייה בפרטי הזמנה, חיפוש, סינון ועדכון סטטוס ישירות בחנות.</p><div class="category-last-sync" id="ordersSyncLabel">ההזמנות ייטענו לאחר החיבור.</div></div><div class="heading-actions"><button class="btn btn-secondary" id="exportOrdersCsv">↓ ייצוא CSV</button><button class="btn btn-primary" id="refreshOrders">↻ רענון הזמנות</button></div></div>
+        <div class="panel orders-toolbar-panel"><div class="orders-toolbar"><div class="searchbox"><span>⌕</span><input id="orderSearch" type="search" placeholder="חיפוש לפי מספר הזמנה, שם או אימייל…" autocomplete="off" aria-label="חיפוש הזמנות"></div><select id="orderStatusFilter" class="filter-select" aria-label="סינון לפי סטטוס"><option value="any">כל הסטטוסים</option><option value="pending">ממתינה לתשלום</option><option value="processing">בטיפול</option><option value="on-hold">בהמתנה</option><option value="completed">הושלמה</option><option value="cancelled">בוטלה</option><option value="refunded">הוחזרה</option><option value="failed">נכשלה</option></select></div><div class="orders-count" id="ordersCount">עדיין לא נטענו הזמנות.</div></div>
+        <div class="panel orders-table-panel"><div id="ordersTableWrap"><div class="loading-panel">התחבר לחנות כדי לטעון הזמנות.</div></div></div>
+        <div class="alert warning"><span class="alert-icon">🔐</span><div>במסך זה עשויים להופיע פרטי קשר וכתובות של לקוחות. השתמש בו רק במכשיר פרטי ומוגן, אל תשתף צילומי מסך עם פרטים אישיים, והימנע משמירת פרטי החיבור בדפדפן משותף.</div></div>
+      </section>
+      <section id="productsView" class="view">
+        <div class="page-heading">
+          <div><h1>המוצרים שלי</h1><p>צפייה, הוספה ועדכון של מוצרי החנות במקום אחד.</p></div>
+          <div class="heading-actions"><button class="btn btn-secondary" id="refreshProducts">↻ רענון מוצרים</button><button class="btn btn-primary" id="addProduct">＋ מוצר חדש</button></div>
+        </div>
+        <div class="welcome-banner" id="connectBanner">
+          <div class="welcome-copy"><h2>מתחילים בחיבור לחנות שלך</h2><p>הזן את כתובת החנות ואת מפתחות ה־API של WooCommerce. אחרי החיבור, רשימת המוצרים תופיע כאן ותוכל לנהל אותה.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn btn-primary btn-sm" id="bannerSettings">הגדרת החיבור ←</button><button class="btn btn-secondary btn-sm" id="bannerHelp">למדריך המלא</button></div></div><div class="welcome-illustration">🛍️</div>
+        </div>
+        <div class="stats">
+          <div class="stat-card"><div class="stat-top"><span>מוצרים בחנות</span><span class="stat-icon">▦</span></div><div class="stat-number" id="totalProducts">—</div><div class="stat-sub">סך המוצרים שנטענו</div></div>
+          <div class="stat-card"><div class="stat-top"><span>מוצרים מפורסמים</span><span class="stat-icon">✓</span></div><div class="stat-number" id="publishedProducts">—</div><div class="stat-sub">גלויים בחנות</div></div>
+          <div class="stat-card"><div class="stat-top"><span>טיוטות</span><span class="stat-icon">✎</span></div><div class="stat-number" id="draftProducts">—</div><div class="stat-sub">מוצרים שלא פורסמו</div></div>
+        </div>
+        <div class="product-toolbar"><div><h2>קטלוג המוצרים</h2><div class="product-count" id="productCount">התחבר כדי לטעון מוצרים</div><div class="category-last-sync" id="lastSyncLabel">הסנכרון האוטומטי יתחיל לאחר החיבור.</div></div><div class="searchbox"><span>⌕</span><input id="searchProducts" type="search" placeholder="חיפוש לפי שם, תיאור או מק״ט…" autocomplete="off" aria-label="חיפוש מוצרים"></div></div>
+        <div id="productGrid" class="product-grid"><div class="empty-state"><div class="empty-icon">🔌</div><h3>עדיין אין חיבור לחנות</h3><p>אחרי הזנת פרטי WooCommerce, המוצרים יוצגו כאן.</p><button class="btn btn-primary" data-go="settings">הגדרת חיבור</button></div></div>
+      </section>
+      <section id="categoriesView" class="view">
+        <div class="page-heading"><div><h1>קטגוריות מוצרים</h1><p>הקטגוריות נשאבות מהחנות וניתן ליצור, למחוק ולשנות את סדר ההצגה שלהן.</p><div class="category-last-sync" id="categorySyncLabel">הקטגוריות ייטענו אוטומטית לאחר החיבור לחנות.</div></div><div class="heading-actions"><button class="btn btn-secondary" id="refreshCategories">↻ רענון קטגוריות</button></div></div>
+        <div class="panel"><div class="panel-heading"><div><h2>יצירת קטגוריה חדשה</h2><p>הקטגוריה תיווצר ישירות ב־WooCommerce ותהיה זמינה לשיוך למוצרים.</p></div><span class="section-tag">סנכרון עם החנות</span></div>
+          <form id="categoryCreateForm" class="category-toolbar"><div class="field"><label for="newCategoryName">שם הקטגוריה</label><input id="newCategoryName" type="text" maxlength="200" required placeholder="לדוגמה: מארזי מתנה"></div><div class="field"><label for="newCategoryParent">קטגוריית אב <span class="optional">(אופציונלי)</span></label><select id="newCategoryParent" style="width:100%;padding:11px 12px;border:1px solid #dce2e9;border-radius:9px;background:#fff;font:inherit;font-size:13px"><option value="0">ללא קטגוריית אב</option></select></div><button type="submit" class="btn btn-primary" id="createCategoryBtn">＋ יצירת קטגוריה</button></form>
+          <div class="alert info"><span class="alert-icon">↕️</span><div>כפתורי החצים משנים את סדר הקטגוריות ושומרים את הסדר גם ב־WooCommerce באמצעות <code>menu_order</code>. קטגוריה שמוחקים מוסרת מהחנות; מוצרים משויכים עלולים להישאר ללא הקטגוריה הזו.</div></div>
+        </div>
+        <div class="panel"><div class="panel-heading"><div><h2>כל הקטגוריות</h2><p id="categoryCount">טען את הקטגוריות מהחנות.</p></div><span class="category-count-pill" id="categoryCountPill">— קטגוריות</span></div><div id="categoryList" class="category-list"><div class="loading-panel">התחבר לחנות כדי לטעון קטגוריות.</div></div></div>
+      </section>
+      <section id="settingsView" class="view">
+        <div class="page-heading"><div><h1>הגדרות וחיבור</h1><p>פרטי החנות נשמרים מקומית וניתנים לשינוי בכל עת.</p></div><div class="heading-actions"><button class="btn btn-secondary" id="clearSettings">ניקוי פרטי חיבור</button></div></div>
+        <div class="panel">
+          <div class="panel-heading"><div><h2>חיבור WooCommerce</h2><p>הפרטים האלו מאפשרים לטעון, ליצור, לערוך ולמחוק מוצרים.</p></div><span class="section-tag">נדרש</span></div>
+          <div class="form-grid">
+            <div class="field full-row"><label for="storeUrl">כתובת החנות <span class="required">*</span></label><input id="storeUrl" type="url" placeholder="https://example.co.il" autocomplete="url"><small>כתובת אתר WordPress שבו פועל WooCommerce, כולל https:// וללא נתיב של API.</small></div>
+            <div class="field"><label for="consumerKey">Consumer Key <span class="required">*</span></label><div class="input-with-action"><input id="consumerKey" type="password" placeholder="ck_…" autocomplete="off" spellcheck="false"><button type="button" class="btn btn-secondary btn-sm toggle-secret" data-target="consumerKey">הצג</button></div></div>
+            <div class="field"><label for="consumerSecret">Consumer Secret <span class="required">*</span></label><div class="input-with-action"><input id="consumerSecret" type="password" placeholder="cs_…" autocomplete="new-password" spellcheck="false"><button type="button" class="btn btn-secondary btn-sm toggle-secret" data-target="consumerSecret">הצג</button></div></div>
+          </div>
+          <div class="alert info"><span class="alert-icon">ℹ️</span><div><strong>יצירת מפתחות:</strong> בלוח הניהול של WordPress היכנס ל־<b>WooCommerce ← הגדרות ← מתקדם ← REST API</b>, לחץ על הוספת מפתח, בחר משתמש והרשאת <b>Read/Write</b>, והעתק לכאן את ה־Consumer Key וה־Consumer Secret.</div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-heading"><div><h2>העלאת תמונות מהמחשב</h2><p>נדרש רק אם רוצים להעלות תמונה חדשה או להחליף תמונה קיימת.</p></div><span class="section-tag">אופציונלי, מומלץ</span></div>
+          <div class="form-grid">
+            <div class="field"><label for="wpUsername">שם משתמש WordPress</label><input id="wpUsername" type="text" placeholder="שם המשתמש שלך" autocomplete="off"><small>שם המשתמש לכניסה ללוח הניהול — לא כתובת האימייל בהכרח.</small></div>
+            <div class="field"><label for="wpAppPassword">סיסמת יישום WordPress</label><div class="input-with-action"><input id="wpAppPassword" type="password" placeholder="xxxx xxxx xxxx xxxx…" autocomplete="new-password"><button type="button" class="btn btn-secondary btn-sm toggle-secret" data-target="wpAppPassword">הצג</button></div><small>זו לא סיסמת הכניסה הרגילה. אפשר לבטל את סיסמת היישום בכל עת ב־WordPress.</small></div>
+          </div>
+          <div class="alert info"><span class="alert-icon">🖼️</span><div>כדי להעלות תמונה מהמכשיר יש ליצור סיסמת יישום ב־WordPress: <b>משתמשים ← פרופיל ← סיסמאות יישום (Application Passwords)</b>. הזן שם כמו <i>Product Manager</i>, לחץ על הוספת סיסמת יישום והעתק אותה לכאן. משתמש זה צריך הרשאה להעלאת מדיה ולניהול מוצרים.</div></div>
+        </div>
+        <div class="alert warning"><span class="alert-icon">🔐</span><div><strong>חשוב בנושא אבטחה:</strong> LocalStorage נוח, אבל אינו כספת. כל מי שיש לו גישה לפרופיל הדפדפן או לקוד JavaScript שרץ באתר עלול תאורטית לגשת לפרטים. השתמש באתר HTTPS, שמור את הקובץ והמפתחות מחוץ למאגר ציבורי, אל תשתף משתמשים אחרים באותו ממשק עם מפתחות מנהל, וצור מפתחות בהרשאות המינימליות הנדרשות. לארגון או לאתר רב־משתמשים מומלץ להשתמש בשרת מתווך מאובטח.</div></div>
+
+        <div class="panel">
+          <div class="panel-heading"><div><h2>ייבוא וייצוא הגדרות</h2><p>אפשר להדביק בלוק טקסט מלא או JSON. הייבוא שומר את הפרטים בדפדפן הנוכחי.</p></div><span class="section-tag">גיבוי והעברה</span></div>
+          <div class="field full-row"><label for="settingsTransferText">תוכן הגדרות להדבקה או לייצוא</label><textarea id="settingsTransferText" rows="9" spellcheck="false" dir="auto" placeholder='אפשר להדביק JSON, למשל: {"storeUrl":"https://example.co.il","consumerKey":"ck_...","consumerSecret":"cs_..."}
+או טקסט בפורמט STORE_URL=...'></textarea><small>פורמט הטקסט הנתמך: STORE_URL, CONSUMER_KEY, CONSUMER_SECRET, WP_USERNAME, WP_APP_PASSWORD. אפשר גם להשתמש בשמות בעברית או באנגלית עם נקודתיים.</small></div>
+          <div class="transfer-actions"><button class="btn btn-primary" id="importSettings">ייבוא ושמירה מקומית</button><button class="btn btn-secondary" id="exportSettingsText">העתקת טקסט מלא</button><button class="btn btn-secondary" id="exportSettingsJson">העתקת JSON</button><button class="btn btn-ghost" id="downloadSettingsJson">הורדת JSON</button></div>
+          <div id="settingsTransferStatus" class="hint" aria-live="polite">הייבוא אינו מתחבר אוטומטית לחנות. לאחר הייבוא לחץ על ״בדיקת חיבור״.</div>
+          <div class="alert warning"><span class="alert-icon">⚠️</span><div>ייצוא הגדרות כולל מפתחות וסיסמת יישום אם נשמרו. קובץ הגיבוי הוא מידע סודי: אל תעלה אותו למאגר GitHub, אל תשלח אותו בצ׳אט ציבורי ואל תשמור אותו בענן משותף.</div></div>
+        </div>
+        <div class="settings-footer"><div id="settingsStatus" class="hint" aria-live="polite">השינויים לא נשמרו עד ללחיצה על שמירת הגדרות.</div><div class="right"><button class="btn btn-secondary" id="testConnection">בדיקת חיבור</button><button class="btn btn-primary" id="saveSettings">שמירת הגדרות וחיבור</button></div></div>
+      </section>
+      <section id="helpView" class="view">
+        <div class="page-heading"><div><h1>הוראות חיבור והפעלה</h1><p>הגדרה ראשונית בכמה צעדים, ללא התקנת תוכנה נוספת.</p></div><div class="heading-actions"><button class="btn btn-primary" data-go="settings">מעבר להגדרות ←</button></div></div>
+        <div class="panel"><div class="panel-heading"><div><h2>חיבור WooCommerce</h2><p>צריך גישה ללוח הניהול של חנות WordPress שלך.</p></div></div><div class="steps">
+          <div class="step-card"><div class="step-number">1</div><div><h3>פתח את לוח הניהול</h3><p>היכנס ל־WordPress של החנות שלך, ובתפריט הצד לחץ על <b>WooCommerce</b>, לאחר מכן על <b>הגדרות</b>.</p></div></div>
+          <div class="step-card"><div class="step-number">2</div><div><h3>מצא את REST API</h3><p>בחר בלשונית <b>מתקדם (Advanced)</b> ואז <b>REST API</b>. לחץ על <b>Add key / הוסף מפתח</b>.</p></div></div>
+          <div class="step-card"><div class="step-number">3</div><div><h3>הפק מפתח עם הרשאה מתאימה</h3><p>תן תיאור, בחר משתמש מורשה, ובחר הרשאת <b>Read/Write</b>. לחץ על יצירת המפתח. העתק מיד את ה־<b>Consumer Key</b> ואת ה־<b>Consumer Secret</b> — הסוד לא יוצג שוב.</p></div></div>
+          <div class="step-card"><div class="step-number">4</div><div><h3>שמור ובדוק חיבור</h3><p>חזור לכאן, פתח <b>הגדרות וחיבור</b>, הדבק את כתובת החנות ואת שני המפתחות, ואז לחץ על <b>שמירת הגדרות וחיבור</b>.</p></div></div>
+          <div class="step-card"><div class="step-number">5</div><div><h3>הגדר תמונות (רק אם צריך)</h3><p>ב־WordPress היכנס ל־<b>משתמשים ← פרופיל</b>, חפש <b>Application Passwords</b>, צור סיסמה חדשה והעתק אותה יחד עם שם המשתמש להגדרות כאן.</p></div></div>
+          <div class="step-card"><div class="step-number">6</div><div><h3>ניהול מוצרים וקטגוריות</h3><p>המוצרים והקטגוריות נטענים מהחנות עם החיבור ומתעדכנים אוטומטית כל חמש דקות. אפשר לשייך קטגוריות, להוסיף מק״ט, ליצור/למחוק קטגוריות ולמיין אותן.</p></div></div>
+        </div></div>
+        <div class="panel"><div class="panel-heading"><div><h2>איך לפרסם ב־GitHub Pages</h2><p>האפליקציה היא קובץ HTML יחיד ואינה זקוקה לבנייה או להתקנת חבילות.</p></div></div><ol class="help-list"><li>צור מאגר GitHub חדש, רצוי פרטי אם הוא מכיל קוד פנימי (המפתחות עצמם לא נמצאים בקובץ).</li><li>העלה את הקובץ הזה ושנה את שמו ל־<code>index.html</code>.</li><li>במאגר פתח <b>Settings ← Pages</b>, בחר מקור פרסום מהענף הראשי (לרוב <code>main</code>) ומהתיקייה <code>/(root)</code>, ושמור.</li><li>פתח את כתובת האתר ש־GitHub Pages מציג והגדר את החיבור. פרטי החיבור נשמרים בדפדפן שבו הזנת אותם, ולא עוברים אוטומטית לדפדפנים אחרים.</li></ol><div class="alert warning"><span class="alert-icon">⚠️</span><div>אם מתקבלת שגיאת CORS או שגיאת רשת, ייתכן שהשרת/תוסף האבטחה בחנות חוסם בקשות מהדומיין של GitHub Pages. יש לאפשר את מקור האתר שלך בשרת בצורה מצומצמת ומבוקרת. אל תפתור זאת באמצעות חשיפת מפתחות בכתובת URL.</div></div></div>
+        <div class="panel"><div class="panel-heading"><div><h2>הערות חשובות</h2><p>כדי למנוע הפתעות בעת ניהול החנות.</p></div></div><ul class="help-list"><li>המחירים מוצגים בשקלים (₪). ודא שמטבע החנות ב־WooCommerce מוגדר לשקל חדש (ILS).</li><li>מוצר עם וריאציות (Variable product) עשוי לקבל מחירים נפרדים לכל וריאציה. במסך זה ניתן לעדכן את שמו, התיאור והתמונה, אבל שינוי המחיר של הווריאציות צריך להתבצע בממשק WooCommerce.</li><li>העלאת תמונה דורשת שסיסמת היישום תהיה זמינה ושהמשתמש יהיה מורשה להעלות מדיה.</li><li>מפתחות API שהוגדרו ב־WooCommerce ניתן לבטל מתוך מסך REST API. מומלץ ליצור מפתח ייעודי לאפליקציה זו.</li><li>הסנכרון האוטומטי טוען את רשימת המוצרים והקטגוריות בעת פתיחת האתר/חיבורו וכל חמש דקות בזמן שהאתר פתוח. ניתן תמיד ללחוץ על רענון ידני.</li><li>המק״ט נשמר בשדה SKU המקורי של WooCommerce, והקטגוריות משויכות דרך מזהי הקטגוריות של החנות.</li><li>כדי להתקין כאפליקציה, העלה את כל קבצי חבילת ה־PWA לתיקיית הפרסום ב־GitHub Pages. בדפדפן נתמך לחץ על ״התקנת האפליקציה״; ב־iPhone אפשר להשתמש בשיתוף Safari ← הוסף למסך הבית.</li><li>האפליקציה שומרת במטמון רק את מעטפת האתר והאייקונים. מוצרים, הזמנות ונתוני מכירות מחייבים חיבור אינטרנט; פרטי ה־API אינם נשמרים במטמון של Service Worker.</li></ul></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+
+<div class="modal-backdrop" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
+  <div class="modal"><div class="modal-header"><div><h2 id="orderModalTitle">פרטי הזמנה</h2><p>פרטי הקנייה שסונכרנו מ־WooCommerce.</p></div><button class="btn-icon" id="closeOrderModal" aria-label="סגירה">✕</button></div><div class="modal-body" id="orderModalBody"></div><div class="modal-footer"><div></div><div class="actions"><button type="button" class="btn btn-primary" id="closeOrderModalFooter" onclick="document.getElementById('orderModal').classList.remove('open');document.body.classList.remove('no-scroll')">סגירה</button></div></div></div>
+</div>
+<div class="modal-backdrop" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="modal-header"><div><h2 id="modalTitle">מוצר חדש</h2><p id="modalSubtitle">הפרטים יישמרו ישירות בחנות WooCommerce.</p></div><button class="btn-icon" id="closeModal" aria-label="סגירה">✕</button></div>
+    <form id="productForm">
+      <div class="modal-body">
+        <div class="field" style="margin-bottom:18px"><label>תמונת מוצר</label><div class="image-picker"><img id="imagePreview" class="image-preview" alt="תצוגה מקדימה של תמונת המוצר" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='9' fill='%23f5f7fa'/%3E%3Cpath d='M23 68l17-19 12 12 10-11 16 18H23z' fill='%23d2d9e3'/%3E%3Ccircle cx='37' cy='34' r='7' fill='%23d2d9e3'/%3E%3C/svg%3E"><div class="image-picker-actions"><input type="file" id="productImageInput" accept="image/*" class="hidden"><button type="button" class="btn btn-secondary btn-sm" id="chooseImage">בחירת תמונה מהמכשיר</button><button type="button" class="btn btn-ghost btn-sm hidden" id="removeImage">הסרת התמונה</button><p>JPG, PNG, WebP או GIF · עד 8MB</p><p id="imageUploadStatus">התמונה תועלה לספריית המדיה בשמירת המוצר.</p></div></div><div id="imageWarning" class="modal-hint hidden">כדי להעלות תמונה נדרשים שם משתמש וסיסמת יישום של WordPress בהגדרות.</div></div>
+        <div class="form-grid">
+          <div class="field full-row"><label for="productName">שם המוצר <span class="required">*</span></label><input id="productName" required maxlength="200" placeholder="לדוגמה: מארז מתנה יוקרתי"></div>
+          <div class="field full-row"><label for="productSku">מק״ט / SKU <span class="optional">(אופציונלי)</span></label><input id="productSku" type="text" maxlength="100" placeholder="לדוגמה: GIFT-001" autocomplete="off"><small>מק״ט הוא קוד ייחודי לניהול וזיהוי המוצר. WooCommerce עשוי לדחות מק״ט שכבר משויך למוצר אחר.</small></div>
+          <div class="field full-row"><label for="productDescription">תיאור המוצר</label><textarea id="productDescription" placeholder="תיאור קצר וברור של המוצר…"></textarea><small>אפשר להשאיר ריק. תיאור שהוזן באתר WooCommerce יישמר בפורמט המקורי כשלא משנים אותו.</small></div>
+          <div class="field full-row"><label>קטגוריות</label><div class="category-selector" id="productCategories"><div class="category-empty">קטגוריות יופיעו כאן אחרי החיבור לחנות.</div></div><small>אפשר לבחור יותר מקטגוריה אחת. לניהול הקטגוריות לחץ על לשונית ״קטגוריות״ בתפריט.</small></div>
+          <div class="field" id="priceField"><label for="productPrice">מחיר (₪) <span class="required" id="priceRequired">*</span></label><div class="currency-input"><input id="productPrice" type="number" min="0" max="999999999" step="0.01" placeholder="0.00" required><span>₪</span></div><small id="priceHint">מחיר המכירה הרגיל של המוצר.</small></div>
+          <div class="field"><label>סטטוס המוצר</label><input id="productStatusDisplay" readonly value="מפורסם בחנות" style="background:#f8fafc;color:#667085"><small>מוצר חדש יפורסם בחנות. בעריכת מוצר נשמר הסטטוס הקיים.</small></div>
+        </div>
+        <div id="variableWarning" class="alert warning hidden"><span class="alert-icon">ℹ️</span><div>זה מוצר עם וריאציות. אפשר לערוך כאן שם, תיאור ותמונה; המחיר מנוהל על ידי הווריאציות ולא ישתנה במסך הזה.</div></div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-danger hidden" id="deleteFromModal"><span>🗑</span> מחיקת מוצר</button><div class="actions"><button type="button" class="btn btn-secondary" id="cancelModal">ביטול</button><button type="submit" class="btn btn-primary" id="saveProduct">שמירת מוצר</button></div></div>
+    </form>
+  </div>
+</div>
+<div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+(() => {
+  'use strict';
+  const STORAGE_KEY = 'wcProductManager.settings.v1';
+  const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+  const $ = (id) => document.getElementById(id);
+  const state = { settings: loadSettings(), products: [], categories: [], categoriesLoaded: false, orders: [], ordersLoaded: false, orderLoading: false, orderSaving: false, analytics: null, analyticsLoaded: false, analyticsLoading: false, currentView: 'dashboard', loading: false, categoryLoading: false, categorySaving: false, productSaving: false, editingProduct: null, selectedFile: null, objectUrl: null, clearImage: false, connected: false, hasLoaded: false, lastSyncAt: 0, ordersLastSyncAt: 0, analyticsLastSyncAt: 0, autoSyncTimer: null, toastTimer: null, installPrompt: null, selectedOrder: null };
+
+  function loadSettings() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { storeUrl: '', consumerKey: '', consumerSecret: '', wpUsername: '', wpAppPassword: '' };
+      const parsed = JSON.parse(raw);
+      return {
+        storeUrl: typeof parsed.storeUrl === 'string' ? parsed.storeUrl : '',
+        consumerKey: typeof parsed.consumerKey === 'string' ? parsed.consumerKey : '',
+        consumerSecret: typeof parsed.consumerSecret === 'string' ? parsed.consumerSecret : '',
+        wpUsername: typeof parsed.wpUsername === 'string' ? parsed.wpUsername : '',
+        wpAppPassword: typeof parsed.wpAppPassword === 'string' ? parsed.wpAppPassword : ''
+      };
+    } catch { return { storeUrl: '', consumerKey: '', consumerSecret: '', wpUsername: '', wpAppPassword: '' }; }
+  }
+  function saveLocalSettings(settings) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(settings)); state.settings = settings; return true; }
+    catch (e) { showToast('לא ניתן לשמור בדפדפן. בדוק שהאחסון המקומי לא חסום.', 'error'); return false; }
+  }
+  function hasWooSettings(s = state.settings) { return !!(s.storeUrl && s.consumerKey && s.consumerSecret); }
+  function normalizeStoreUrl(value) {
+    let v = String(value || '').trim();
+    if (!v) throw new Error('יש להזין כתובת של חנות WooCommerce.');
+    if (!/^https?:\/\//i.test(v)) v = 'https://' + v;
+    let parsed;
+    try { parsed = new URL(v); } catch { throw new Error('כתובת החנות אינה תקינה.'); }
+    if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error('יש להשתמש בכתובת HTTP או HTTPS.');
+    if (parsed.username || parsed.password || parsed.search || parsed.hash) throw new Error('כתובת החנות לא צריכה לכלול שם משתמש, סיסמה, פרמטרים או #.');
+    if (location.protocol === 'https:' && parsed.protocol !== 'https:' && !['localhost', '127.0.0.1'].includes(parsed.hostname)) throw new Error('האתר פתוח ב־HTTPS ולכן גם חנות WooCommerce חייבת להשתמש ב־HTTPS.');
+    return parsed.href.replace(/\/+$/, '');
+  }
+  function getWooBase() { return normalizeStoreUrl(state.settings.storeUrl) + '/wp-json/wc/v3'; }
+  function b64Utf8(value) { return btoa(unescape(encodeURIComponent(value))); }
+  function wooAuth() { return 'Basic ' + b64Utf8(state.settings.consumerKey + ':' + state.settings.consumerSecret); }
+  function wpAuth() { return 'Basic ' + b64Utf8(state.settings.wpUsername + ':' + state.settings.wpAppPassword.replace(/\s+/g, '')); }
+  function safeMessage(data, fallback) {
+    if (data && typeof data.message === 'string' && data.message.trim()) return data.message;
+    if (data && typeof data.error === 'string') return data.error;
+    return fallback;
+  }
+  async function parseResponse(response) {
+    const text = await response.text();
+    let data = null;
+    if (text) { try { data = JSON.parse(text); } catch { data = { message: text.slice(0, 500) }; } }
+    if (!response.ok) {
+      const fallback = response.status === 401 ? 'החיבור נדחה (401). בדוק את המפתחות והרשאותיהם.' : response.status === 403 ? 'אין הרשאה לבצע פעולה זו (403).' : response.status === 404 ? 'נתיב ה־API לא נמצא (404). בדוק את כתובת החנות והפעלת WooCommerce REST API.' : `השרת החזיר שגיאה ${response.status}.`;
+      throw new Error(safeMessage(data, fallback));
+    }
+    return data;
+  }
+  async function wooRequest(path, options = {}) {
+    if (!hasWooSettings()) throw new Error('קודם יש להזין ולשמור את פרטי החיבור בהגדרות.');
+    const headers = new Headers(options.headers || {});
+    headers.set('Authorization', wooAuth());
+    if (options.body && !(options.body instanceof FormData) && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
+    let response;
+    try { response = await fetch(getWooBase() + path, { ...options, headers, mode: 'cors', credentials: 'omit' }); }
+    catch (err) { throw new Error('לא ניתן להגיע לשרת החנות. בדוק את כתובת האתר, חיבור האינטרנט והגדרות CORS של WordPress. (' + (err && err.message ? err.message : 'שגיאת רשת') + ')'); }
+    return parseResponse(response);
+  }
+  async function wpMediaUpload(file) {
+    if (!state.settings.wpUsername || !state.settings.wpAppPassword) throw new Error('להעלאת תמונה יש להגדיר שם משתמש וסיסמת יישום WordPress בהגדרות.');
+    const storeUrl = normalizeStoreUrl(state.settings.storeUrl);
+    const safeName = file.name.replace(/[^\x20-\x7E]|[\r\n"\\;]/g, '_').slice(0, 180) || 'product-image';
+    let response;
+    try {
+      response = await fetch(storeUrl + '/wp-json/wp/v2/media', {
+        method: 'POST', mode: 'cors', credentials: 'omit',
+        headers: { 'Authorization': wpAuth(), 'Content-Disposition': `attachment; filename="${safeName}"`, 'Content-Type': file.type || 'application/octet-stream' },
+        body: file
+      });
+    } catch (err) {
+      throw new Error('העלאת התמונה נכשלה בגלל שגיאת רשת או CORS. בדוק שהשרת מאפשר העלאת מדיה מהדומיין של האתר.');
+    }
+    return parseResponse(response);
+  }
+  function showToast(message, type = '') {
+    const el = document.createElement('div'); el.className = 'toast' + (type ? ' ' + type : '');
+    const mark = document.createElement('span'); mark.textContent = type === 'error' ? '⚠️' : type === 'success' ? '✓' : 'ℹ️';
+    const text = document.createElement('span'); text.textContent = String(message || 'הפעולה הסתיימה.');
+    el.append(mark, text); $('toastContainer').appendChild(el);
+    window.setTimeout(() => el.remove(), 5200);
+  }
+  function stripHtml(value) {
+    try { return new DOMParser().parseFromString(String(value || ''), 'text/html').body.textContent.replace(/\s+/g, ' ').trim(); }
+    catch { return String(value || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(); }
+  }
+  function formatPrice(product) {
+    if (product.type === 'variable') return 'לפי וריאציות';
+    if (product.type === 'grouped') return 'לפי מוצרים מקושרים';
+    const raw = product.regular_price !== undefined && product.regular_price !== '' ? product.regular_price : product.price;
+    if (raw === undefined || raw === null || raw === '') return 'לא הוגדר מחיר';
+    const num = Number(raw);
+    return Number.isFinite(num) ? '₪' + num.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '₪' + String(raw);
+  }
+  function escapeText(value) { return String(value ?? ''); }
+  function escapeHtml(value) { return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+  function formatILS(value) { const n = Number(value); return Number.isFinite(n) ? new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS', maximumFractionDigits: 2 }).format(n) : '—'; }
+  function formatDate(value) { const d = value ? new Date(value) : null; return d && Number.isFinite(d.getTime()) ? d.toLocaleString('he-IL', { dateStyle: 'short', timeStyle: 'short' }) : '—'; }
+  function localDateString(d = new Date()) { const x = new Date(d.getTime() - d.getTimezoneOffset() * 60000); return x.toISOString().slice(0, 10); }
+  function validImageUrl(value) {
+    try { const u = new URL(value, location.href); return ['http:', 'https:'].includes(u.protocol) ? u.href : ''; } catch { return ''; }
+  }
+  function setConnectionPill(connected, label) {
+    state.connected = connected;
+    const pill = $('connectionPill'); pill.textContent = label || (connected ? 'מחובר לחנות' : 'לא מחובר'); pill.classList.toggle('ok', !!connected);
+    $('connectBanner').classList.toggle('hidden', !!connected);
+  }
+  function fillSettingsForm() {
+    $('storeUrl').value = state.settings.storeUrl;
+    $('consumerKey').value = state.settings.consumerKey;
+    $('consumerSecret').value = state.settings.consumerSecret;
+    $('wpUsername').value = state.settings.wpUsername;
+    $('wpAppPassword').value = state.settings.wpAppPassword;
+  }
+  function readSettingsForm() {
+    const storeUrl = normalizeStoreUrl($('storeUrl').value);
+    const consumerKey = $('consumerKey').value.trim();
+    const consumerSecret = $('consumerSecret').value.trim();
+    if (!consumerKey || !consumerSecret) throw new Error('יש להזין גם Consumer Key וגם Consumer Secret.');
+    return { storeUrl, consumerKey, consumerSecret, wpUsername: $('wpUsername').value.trim(), wpAppPassword: $('wpAppPassword').value.trim() };
+  }
+  function showView(view) {
+    const allowed = ['dashboard', 'orders', 'products', 'categories', 'settings', 'help'];
+    if (!allowed.includes(view)) view = 'products';
+    state.currentView = view;
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === view + 'View'));
+    document.querySelectorAll('.nav-button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+    closeMobileMenu();
+    if (view === 'settings') fillSettingsForm();
+    if (view === 'dashboard') { renderAnalytics(); if (hasWooSettings() && (!state.analyticsLoaded || Date.now() - state.analyticsLastSyncAt > 5 * 60 * 1000)) refreshAnalytics({ silent: true }); }
+    if (view === 'orders') { renderOrders(); if (hasWooSettings() && (!state.ordersLoaded || Date.now() - state.ordersLastSyncAt > 2 * 60 * 1000)) refreshOrders({ silent: true }); }
+    if (view === 'products') renderProducts();
+    if (view === 'categories') renderCategories();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function openMobileMenu() { $('sidebar').classList.add('mobile-open'); $('sidebarScrim').classList.add('open'); }
+  function closeMobileMenu() { $('sidebar').classList.remove('mobile-open'); $('sidebarScrim').classList.remove('open'); }
+  function renderStats() {
+    $('totalProducts').textContent = state.hasLoaded ? state.products.length.toLocaleString('he-IL') : '—';
+    $('publishedProducts').textContent = state.hasLoaded ? state.products.filter(p => p.status === 'publish').length.toLocaleString('he-IL') : '—';
+    $('draftProducts').textContent = state.hasLoaded ? state.products.filter(p => p.status === 'draft').length.toLocaleString('he-IL') : '—';
+  }
+  function renderProducts() {
+    renderStats();
+    const query = $('searchProducts').value.trim().toLocaleLowerCase('he');
+    const shown = state.products.filter(p => !query || String(p.name || '').toLocaleLowerCase('he').includes(query) || stripHtml(p.description).toLocaleLowerCase('he').includes(query) || String(p.sku || '').toLocaleLowerCase('he').includes(query) || (p.categories || []).some(c => String(categoryName(c.id) || '').toLocaleLowerCase('he').includes(query)));
+    $('productCount').textContent = state.hasLoaded ? `מוצגים ${shown.length.toLocaleString('he-IL')} מתוך ${state.products.length.toLocaleString('he-IL')} מוצרים` : 'התחבר כדי לטעון מוצרים';
+    const grid = $('productGrid'); grid.replaceChildren();
+    if (state.loading) {
+      const d = document.createElement('div'); d.className = 'loading-panel'; d.innerHTML = '<span class="spinner" aria-hidden="true"></span>טוען מוצרים מהחנות…'; grid.appendChild(d); return;
+    }
+    if (!state.hasLoaded) {
+      const d = document.createElement('div'); d.className = 'empty-state';
+      const icon = document.createElement('div'); icon.className = 'empty-icon'; icon.textContent = '🔌';
+      const h = document.createElement('h3'); h.textContent = 'עדיין אין חיבור לחנות';
+      const p = document.createElement('p'); p.textContent = 'אחרי הזנת פרטי WooCommerce, המוצרים יוצגו כאן.';
+      const b = document.createElement('button'); b.className = 'btn btn-primary'; b.textContent = 'הגדרת חיבור'; b.onclick = () => showView('settings');
+      d.append(icon,h,p,b); grid.appendChild(d); return;
+    }
+    if (!shown.length) {
+      const d = document.createElement('div'); d.className = 'empty-state';
+      const icon = document.createElement('div'); icon.className = 'empty-icon'; icon.textContent = query ? '⌕' : '📦';
+      const h = document.createElement('h3'); h.textContent = query ? 'לא נמצאו תוצאות' : 'אין עדיין מוצרים בחנות';
+      const p = document.createElement('p'); p.textContent = query ? 'נסה מילות חיפוש אחרות.' : 'אפשר ליצור את המוצר הראשון ולהוסיף תמונה, תיאור ומחיר.';
+      d.append(icon,h,p); if (!query) { const b = document.createElement('button'); b.className = 'btn btn-primary'; b.textContent = '＋ מוצר חדש'; b.onclick = () => openProductModal(); d.appendChild(b); } grid.appendChild(d); return;
+    }
+    const frag = document.createDocumentFragment();
+    for (const product of shown) {
+      const card = document.createElement('article'); card.className = 'product-card';
+      const imageWrap = document.createElement('div'); imageWrap.className = 'product-image-wrap';
+      const imageUrl = product.images && product.images[0] ? validImageUrl(product.images[0].src) : '';
+      if (imageUrl) { const img = document.createElement('img'); img.className = 'product-image'; img.loading = 'lazy'; img.alt = escapeText(product.name); img.src = imageUrl; img.onerror = () => { img.remove(); addPlaceholder(imageWrap); }; imageWrap.appendChild(img); }
+      else addPlaceholder(imageWrap);
+      const typePill = document.createElement('span'); typePill.className = 'type-pill'; typePill.textContent = product.type === 'variable' ? 'מוצר עם וריאציות' : product.status === 'draft' ? 'טיוטה' : product.status === 'publish' ? 'מפורסם' : statusLabel(product.status); imageWrap.appendChild(typePill);
+      const body = document.createElement('div'); body.className = 'product-card-body';
+      const name = document.createElement('h3'); name.className = 'product-name'; name.textContent = product.name || '(ללא שם)'; name.title = product.name || '';
+      const meta = document.createElement('div'); meta.className = 'product-meta';
+      if (product.sku) { const sku = document.createElement('span'); sku.className = 'meta-chip sku'; sku.textContent = 'מק״ט: ' + product.sku; meta.appendChild(sku); }
+      for (const cat of (product.categories || []).slice(0, 3)) { const chip = document.createElement('span'); chip.className = 'meta-chip'; chip.textContent = categoryName(cat.id) || cat.name || ''; if (chip.textContent) meta.appendChild(chip); }
+      const desc = document.createElement('div'); desc.className = 'product-description'; desc.textContent = stripHtml(product.short_description || product.description) || 'אין תיאור למוצר';
+      const bottom = document.createElement('div'); bottom.className = 'product-card-bottom';
+      const price = document.createElement('div'); price.className = 'product-price'; price.textContent = formatPrice(product);
+      const actions = document.createElement('div'); actions.className = 'product-actions';
+      const edit = document.createElement('button'); edit.className = 'btn btn-secondary btn-sm'; edit.textContent = '✎ עריכה'; edit.setAttribute('aria-label','עריכת ' + (product.name || 'מוצר')); edit.onclick = () => openProductModal(product);
+      const del = document.createElement('button'); del.className = 'btn-icon'; del.textContent = '⌫'; del.title = 'מחיקת מוצר'; del.setAttribute('aria-label','מחיקת ' + (product.name || 'מוצר')); del.onclick = () => deleteProduct(product); del.style.color = 'var(--red)';
+      actions.append(edit,del); bottom.append(price,actions); body.append(name); if (meta.childElementCount) body.appendChild(meta); body.append(desc,bottom); card.append(imageWrap,body); frag.appendChild(card);
+    }
+    grid.appendChild(frag);
+  }
+  function addPlaceholder(parent) { const ph = document.createElement('div'); ph.className = 'image-placeholder'; const b = document.createElement('b'); b.textContent = '▧'; const s = document.createElement('span'); s.textContent = 'ללא תמונה'; ph.append(b,s); parent.appendChild(ph); }
+  function statusLabel(status) { return ({ pending:'ממתין לאישור', private:'פרטי', trash:'באשפה' })[status] || String(status || 'מוצר'); }
+  function categoryName(id) { return state.categories.find(c => Number(c.id) === Number(id))?.name || ''; }
+  function sortedCategories(list = state.categories) { return [...list].sort((a, b) => (Number(a.menu_order) || 0) - (Number(b.menu_order) || 0) || String(a.name || '').localeCompare(String(b.name || ''), 'he')); }
+  function renderProductCategoryOptions(selectedIds = []) {
+    const wrap = $('productCategories'); wrap.replaceChildren();
+    if (!state.categories.length) { const empty = document.createElement('div'); empty.className = 'category-empty'; empty.textContent = 'לא נמצאו קטגוריות. אפשר ליצור קטגוריה במסך ״קטגוריות״ לפני שמירת המוצר.'; wrap.appendChild(empty); return; }
+    const selected = new Set((selectedIds || []).map(Number));
+    for (const cat of sortedCategories()) {
+      const label = document.createElement('label'); label.className = 'category-check';
+      const input = document.createElement('input'); input.type = 'checkbox'; input.name = 'productCategory'; input.value = String(cat.id); input.checked = selected.has(Number(cat.id));
+      const span = document.createElement('span'); span.textContent = cat.name || '(ללא שם)';
+      label.append(input, span); wrap.appendChild(label);
+    }
+  }
+  function selectedProductCategoryIds() { return [...document.querySelectorAll('input[name="productCategory"]:checked')].map(el => Number(el.value)).filter(Number.isFinite).map(id => ({ id })); }
+  function renderCategoryParentOptions(selectedParent = 0) {
+    const select = $('newCategoryParent'); if (!select) return;
+    select.replaceChildren(); const first = document.createElement('option'); first.value = '0'; first.textContent = 'ללא קטגוריית אב'; select.appendChild(first);
+    for (const cat of sortedCategories()) { const option = document.createElement('option'); option.value = String(cat.id); option.textContent = cat.name; option.selected = Number(cat.id) === Number(selectedParent); select.appendChild(option); }
+  }
+  function renderCategories() {
+    renderCategoryParentOptions();
+    const list = $('categoryList'); if (!list) return;
+    $('categoryCount').textContent = state.categoriesLoaded ? `נמצאו ${state.categories.length.toLocaleString('he-IL')} קטגוריות בחנות.` : 'הקטגוריות טרם נטענו מהחנות.';
+    $('categoryCountPill').textContent = state.categories.length.toLocaleString('he-IL') + ' קטגוריות';
+    if (state.categoryLoading) { list.replaceChildren(); const loading = document.createElement('div'); loading.className = 'loading-panel'; loading.innerHTML = '<span class="spinner" aria-hidden="true"></span>שואב קטגוריות מ־WooCommerce…'; list.appendChild(loading); return; }
+    list.replaceChildren();
+    if (!state.categoriesLoaded) { const box = document.createElement('div'); box.className = 'empty-state'; const h = document.createElement('h3'); h.textContent = 'הקטגוריות עדיין לא נטענו'; const p = document.createElement('p'); p.textContent = hasWooSettings() ? 'בדוק את חיבור WooCommerce ונסה לרענן את הקטגוריות.' : 'לאחר הזנת פרטי החיבור, הקטגוריות ייטענו אוטומטית.'; const b = document.createElement('button'); b.className = 'btn btn-primary'; b.textContent = hasWooSettings() ? '↻ נסה שוב' : 'פתיחת הגדרות'; b.onclick = () => hasWooSettings() ? refreshCategories() : showView('settings'); box.append(h,p,b); list.appendChild(box); return; }
+    const cats = sortedCategories();
+    if (!cats.length) { const box = document.createElement('div'); box.className = 'empty-state'; const h = document.createElement('h3'); h.textContent = 'לא נמצאו קטגוריות'; const p = document.createElement('p'); p.textContent = 'אפשר ליצור קטגוריה ראשונה באמצעות הטופס למעלה.'; box.append(h,p); list.appendChild(box); return; }
+    cats.forEach((cat, index) => {
+      const row = document.createElement('article'); row.className = 'category-row';
+      const info = document.createElement('div'); info.className = 'category-info';
+      const sym = document.createElement('div'); sym.className = 'category-symbol'; sym.textContent = '▤';
+      const content = document.createElement('div'); const name = document.createElement('div'); name.className = 'category-name'; name.textContent = cat.name || '(ללא שם)';
+      const parent = Number(cat.parent) ? state.categories.find(c => Number(c.id) === Number(cat.parent))?.name : '';
+      const details = document.createElement('div'); details.className = 'category-details'; details.textContent = `מזהה: ${cat.id} · ${Number(cat.count) || 0} מוצרים${parent ? ' · קטגוריית אב: ' + parent : ''}`;
+      content.append(name, details); info.append(sym, content);
+      const actions = document.createElement('div'); actions.className = 'category-actions';
+      const up = document.createElement('button'); up.type = 'button'; up.className = 'btn-icon'; up.textContent = '↑'; up.title = 'הזזת הקטגוריה למעלה'; up.setAttribute('aria-label', 'הזזת ' + cat.name + ' למעלה'); up.disabled = index === 0 || state.categorySaving; up.onclick = () => moveCategory(cat.id, -1);
+      const down = document.createElement('button'); down.type = 'button'; down.className = 'btn-icon'; down.textContent = '↓'; down.title = 'הזזת הקטגוריה למטה'; down.setAttribute('aria-label', 'הזזת ' + cat.name + ' למטה'); down.disabled = index === cats.length - 1 || state.categorySaving; down.onclick = () => moveCategory(cat.id, 1);
+      const del = document.createElement('button'); del.type = 'button'; del.className = 'btn btn-danger btn-sm'; del.textContent = '🗑 מחיקה'; del.disabled = state.categorySaving; del.onclick = () => deleteCategory(cat);
+      actions.append(up, down, del); row.append(info, actions); list.appendChild(row);
+    });
+    $('categorySyncLabel').textContent = state.lastSyncAt ? 'סנכרון אחרון: ' + new Date(state.lastSyncAt).toLocaleString('he-IL') : 'ממתין לסנכרון ראשון.';
+  }
+  async function fetchAllCategories() {
+    const all = []; const maxPages = 100;
+    for (let page = 1; page <= maxPages; page++) {
+      const batch = await wooRequest(`/products/categories?hide_empty=false&per_page=100&page=${page}&orderby=name&order=asc`, { method: 'GET' });
+      if (!Array.isArray(batch)) throw new Error('השרת החזיר תשובה לא צפויה ברשימת הקטגוריות.');
+      all.push(...batch);
+      if (batch.length < 100) break;
+      if (page === maxPages) showToast('נטענו עד 10,000 קטגוריות. לא כולן הוצגו.', '');
+    }
+    return all;
+  }
+  async function refreshCategories(options = {}) {
+    const { silent = false } = options;
+    if (!hasWooSettings()) { if (!silent) { showToast('הזן תחילה את פרטי החיבור בהגדרות.', 'error'); showView('settings'); } return false; }
+    if (state.categoryLoading) return false;
+    state.categoryLoading = true; if (!silent) renderCategories();
+    if ($('refreshCategories')) $('refreshCategories').disabled = true;
+    try {
+      state.categories = await fetchAllCategories();
+      state.categoriesLoaded = true;
+      // If a product form is open, preserve its current unsaved checkbox selections during background sync.
+      const productFormOpen = $('productModal').classList.contains('open');
+      const selectedNow = productFormOpen ? selectedProductCategoryIds().map(c => c.id) : (state.editingProduct?.categories?.map(c => c.id) || []);
+      renderProductCategoryOptions(selectedNow);
+      renderCategories();
+      $('categorySyncLabel').textContent = state.lastSyncAt ? 'סנכרון אחרון: ' + new Date(state.lastSyncAt).toLocaleString('he-IL') : 'הקטגוריות עודכנו מהחנות.';
+      return true;
+    } catch (err) {
+      if (!silent) showToast('טעינת הקטגוריות נכשלה: ' + (err.message || 'שגיאת שרת'), 'error');
+      return false;
+    } finally { state.categoryLoading = false; if ($('refreshCategories')) $('refreshCategories').disabled = false; renderCategories(); }
+  }
+  async function createCategory(event) {
+    event.preventDefault(); if (state.categorySaving) return;
+    const name = $('newCategoryName').value.trim(); if (!name) { showToast('יש להזין שם לקטגוריה.', 'error'); return; }
+    const parent = Number($('newCategoryParent').value) || 0;
+    if (parent && !state.categories.some(c => Number(c.id) === parent)) { showToast('קטגוריית האב שנבחרה אינה קיימת עוד. רענן קטגוריות ונסה שוב.', 'error'); return; }
+    state.categorySaving = true; $('createCategoryBtn').disabled = true; $('createCategoryBtn').textContent = 'יוצר…'; renderCategories();
+    try {
+      const created = await wooRequest('/products/categories', { method: 'POST', body: JSON.stringify({ name, parent, menu_order: state.categories.length }) });
+      if (!created?.id) throw new Error('השרת לא אישר את יצירת הקטגוריה.');
+      state.categories.push(created); $('newCategoryName').value = ''; renderCategories(); renderProductCategoryOptions(); showToast('הקטגוריה נוצרה בהצלחה.', 'success');
+      await refreshCategories({ silent: true });
+    } catch (err) { showToast('יצירת הקטגוריה נכשלה: ' + (err.message || 'שגיאת שרת'), 'error'); }
+    finally { state.categorySaving = false; $('createCategoryBtn').disabled = false; $('createCategoryBtn').textContent = '＋ יצירת קטגוריה'; renderCategories(); }
+  }
+  async function deleteCategory(category) {
+    if (!category?.id || state.categorySaving) return;
+    const uses = Number(category.count) || 0;
+    if (!confirm(`למחוק את הקטגוריה ״${category.name}״?
+
+${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}המוצרים עצמם לא יימחקו, אך שיוך הקטגוריה יוסר. לא ניתן לבטל את הפעולה מכאן.`)) return;
+    state.categorySaving = true; renderCategories();
+    try {
+      await wooRequest('/products/categories/' + encodeURIComponent(category.id) + '?force=true', { method: 'DELETE' });
+      state.categories = state.categories.filter(c => Number(c.id) !== Number(category.id));
+      state.products = state.products.map(p => ({ ...p, categories: (p.categories || []).filter(c => Number(c.id) !== Number(category.id)) }));
+      renderCategories(); renderProducts(); renderProductCategoryOptions(); showToast('הקטגוריה נמחקה מהחנות.', 'success');
+      await refreshCategories({ silent: true });
+    } catch (err) { showToast('מחיקת הקטגוריה נכשלה: ' + (err.message || 'שגיאת שרת'), 'error'); }
+    finally { state.categorySaving = false; renderCategories(); }
+  }
+  async function moveCategory(id, direction) {
+    if (state.categorySaving) return;
+    const cats = sortedCategories(); const index = cats.findIndex(c => Number(c.id) === Number(id)); const next = index + direction;
+    if (index < 0 || next < 0 || next >= cats.length) return;
+    [cats[index], cats[next]] = [cats[next], cats[index]];
+    state.categorySaving = true; renderCategories();
+    try {
+      // Persist a complete, deterministic order so equal/legacy menu_order values do not break reordering.
+      const saved = [];
+      for (let i = 0; i < cats.length; i++) {
+        const updated = await wooRequest('/products/categories/' + encodeURIComponent(cats[i].id), { method: 'PUT', body: JSON.stringify({ menu_order: i }) });
+        saved.push(updated && updated.id ? updated : { ...cats[i], menu_order: i });
+      }
+      state.categories = saved; renderCategories(); renderProductCategoryOptions(); showToast('סדר הקטגוריות נשמר.', 'success');
+    } catch (err) {
+      showToast('שמירת סדר הקטגוריות נכשלה: ' + (err.message || 'שגיאת שרת') + ' · מבצע רענון כדי לשחזר את הסדר מהחנות.', 'error');
+      await refreshCategories({ silent: true });
+    } finally { state.categorySaving = false; renderCategories(); }
+  }
+  async function refreshProducts() {
+    if (!hasWooSettings()) { setConnectionPill(false); showView('settings'); showToast('הזן תחילה את פרטי החיבור.', 'error'); return; }
+    if (state.loading) return;
+    state.loading = true; renderProducts(); $('refreshProducts').disabled = true;
+    try {
+      const all = []; const maxPages = 100;
+      for (let page = 1; page <= maxPages; page++) {
+        const batch = await wooRequest(`/products?status=any&per_page=100&page=${page}&orderby=date&order=desc`, { method: 'GET' });
+        if (!Array.isArray(batch)) throw new Error('השרת החזיר תשובה לא צפויה ברשימת המוצרים.');
+        all.push(...batch);
+        if (batch.length < 100) break;
+        if (page === maxPages) showToast('הוצגו עד 10,000 מוצרים. החנות מכילה יותר, ולכן לא כולם נטענו.', '');
+      }
+      state.products = all; state.hasLoaded = true; setConnectionPill(true); $('settingsStatus').textContent = 'החיבור פעיל. המוצרים נטענו מהחנות.'; renderProducts();
+      const categoriesOk = await refreshCategories({ silent: true });
+      state.lastSyncAt = Date.now();
+      $('lastSyncLabel').textContent = 'סנכרון אחרון: ' + new Date(state.lastSyncAt).toLocaleString('he-IL') + ' · סנכרון אוטומטי כל 5 דקות';
+      if (!categoriesOk) $('categorySyncLabel').textContent = 'לא ניתן היה לטעון קטגוריות. בדוק הרשאות API ונסה לרענן.';
+    } catch (err) {
+      setConnectionPill(false, 'בעיית חיבור');
+      showToast(err.message || 'לא ניתן לטעון מוצרים.', 'error');
+      if (!state.hasLoaded) { state.products = []; renderProducts(); }
+    } finally { state.loading = false; $('refreshProducts').disabled = false; renderProducts(); }
+  }
+  async function testAndConnect(saveFirst = true) {
+    let settings;
+    try { settings = readSettingsForm(); }
+    catch (e) { showToast(e.message, 'error'); return false; }
+    const old = state.settings;
+    if (saveFirst) {
+      if (!saveLocalSettings(settings)) return false;
+    } else state.settings = settings;
+    // Never carry product/category IDs from one store into another store's editor.
+    if ((old.storeUrl || '') !== settings.storeUrl) {
+      state.products = []; state.categories = []; state.categoriesLoaded = false; state.hasLoaded = false; state.orders = []; state.ordersLoaded = false; state.analytics = null; state.analyticsLoaded = false; state.lastSyncAt = 0; state.ordersLastSyncAt = 0; state.analyticsLastSyncAt = 0;
+      renderProducts(); renderCategories();
+      $('lastSyncLabel').textContent = 'מתחבר לחנות החדשה…';
+    }
+    $('testConnection').disabled = true; $('saveSettings').disabled = true; $('testConnection').textContent = 'בודק…'; $('saveSettings').textContent = 'מתחבר…'; $('settingsStatus').textContent = 'בודק גישה ל־WooCommerce…';
+    try {
+      await wooRequest('/products?per_page=1', { method: 'GET' });
+      setConnectionPill(true); $('settingsStatus').textContent = 'החיבור תקין. מפתח ה־API הצליח לגשת למוצרים.';
+      showToast('החיבור לחנות הצליח!', 'success');
+      await refreshProducts(); await Promise.allSettled([refreshAnalytics({ silent: true }), refreshOrders({ silent: true })]); showView('dashboard'); return true;
+    } catch (e) {
+      setConnectionPill(false, 'לא ניתן להתחבר'); $('settingsStatus').textContent = 'החיבור לא הצליח: ' + e.message;
+      showToast('בדיקת החיבור נכשלה: ' + e.message, 'error');
+      if (!saveFirst) state.settings = old;
+      return false;
+    } finally { $('testConnection').disabled = false; $('saveSettings').disabled = false; $('testConnection').textContent = 'בדיקת חיבור'; $('saveSettings').textContent = 'שמירת הגדרות וחיבור'; }
+  }
+  function revokePreviewUrl() { if (state.objectUrl) { URL.revokeObjectURL(state.objectUrl); state.objectUrl = null; } }
+  function resetImageState() { revokePreviewUrl(); state.selectedFile = null; state.clearImage = false; $('productImageInput').value = ''; $('removeImage').classList.add('hidden'); $('imageWarning').classList.add('hidden'); $('imageUploadStatus').textContent = 'התמונה תועלה לספריית המדיה בשמירת המוצר.'; }
+  function openProductModal(product = null) {
+    if (!hasWooSettings()) { showToast('קודם התחבר לחנות דרך ההגדרות.', 'error'); showView('settings'); return; }
+    if (!state.hasLoaded) { showToast('טען את המוצרים לפני פתיחת הטופס.', 'error'); return; }
+    resetImageState(); state.editingProduct = product ? JSON.parse(JSON.stringify(product)) : null;
+    $('modalTitle').textContent = product ? 'עריכת מוצר' : 'הוספת מוצר חדש';
+    $('modalSubtitle').textContent = product ? `עריכת מוצר מספר ${product.id}` : 'הפרטים יישמרו ישירות בחנות WooCommerce.';
+    $('productName').value = product?.name || ''; $('productSku').value = product?.sku || ''; $('productDescription').value = product?.description || '';
+    renderProductCategoryOptions(product?.categories?.map(c => c.id) || []);
+    $('productPrice').value = product && product.type !== 'variable' ? (product.regular_price !== '' && product.regular_price != null ? product.regular_price : product.price || '') : '';
+    $('productStatusDisplay').value = product ? statusLabel(product.status) : 'מפורסם בחנות';
+    const priceManagedByChildren = !!product && ['variable', 'grouped'].includes(product.type); $('productPrice').disabled = priceManagedByChildren; $('productPrice').required = !priceManagedByChildren; $('priceRequired').classList.toggle('hidden', priceManagedByChildren); $('priceHint').textContent = priceManagedByChildren ? (product.type === 'variable' ? 'מחירי מוצר זה נקבעים ברמת הווריאציה.' : 'המחיר מנוהל במוצרים המקושרים.') : 'מחיר המכירה הרגיל של המוצר.'; $('variableWarning').classList.toggle('hidden', !priceManagedByChildren);
+    $('variableWarning').lastElementChild.textContent = product?.type === 'grouped' ? 'זהו מוצר מקובץ. אפשר לערוך כאן שם, תיאור ותמונה; המחירים נמצאים במוצרים המקושרים ולא ישתנו במסך הזה.' : 'זה מוצר עם וריאציות. אפשר לערוך כאן שם, תיאור ותמונה; המחיר מנוהל על ידי הווריאציות ולא ישתנה במסך הזה.';
+    $('deleteFromModal').classList.toggle('hidden', !product); $('saveProduct').textContent = product ? 'שמירת שינויים' : 'יצירת מוצר';
+    const image = product?.images?.[0]?.src ? validImageUrl(product.images[0].src) : '';
+    if (image) { $('imagePreview').src = image; $('removeImage').classList.remove('hidden'); $('imageUploadStatus').textContent = 'התמונה הקיימת תישמר אם לא תבחר תמונה אחרת.'; }
+    else { $('imagePreview').src = 'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27100%27 height=%27100%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%279%27 fill=%27%23f5f7fa%27/%3E%3Cpath d=%27M23 68l17-19 12 12 10-11 16 18H23z%27 fill=%27%23d2d9e3%27/%3E%3Ccircle cx=%2737%27 cy=%2734%27 r=%277%27 fill=%27%23d2d9e3%27/%3E%3C/svg%3E'; }
+    $('productModal').classList.add('open'); document.body.classList.add('no-scroll'); setTimeout(() => $('productName').focus(), 30);
+  }
+  function closeProductModal() { if (state.productSaving) return; $('productModal').classList.remove('open'); document.body.classList.remove('no-scroll'); resetImageState(); state.editingProduct = null; }
+  function chooseImageFile(file) {
+    if (!file) return;
+    if (!file.type || !file.type.startsWith('image/')) { showToast('יש לבחור קובץ תמונה בלבד.', 'error'); return; }
+    if (file.size > MAX_IMAGE_BYTES) { showToast('התמונה גדולה מדי. הגודל המרבי הוא 8MB.', 'error'); $('productImageInput').value = ''; return; }
+    revokePreviewUrl(); state.selectedFile = file; state.clearImage = false; state.objectUrl = URL.createObjectURL(file); $('imagePreview').src = state.objectUrl; $('removeImage').classList.remove('hidden'); $('imageUploadStatus').textContent = `נבחרה תמונה: ${file.name}. היא תועלה בשמירת המוצר.`;
+    $('imageWarning').classList.toggle('hidden', !!(state.settings.wpUsername && state.settings.wpAppPassword));
+  }
+  async function saveProduct(event) {
+    event.preventDefault(); if (state.productSaving) return;
+    const name = $('productName').value.trim(); const sku = $('productSku').value.trim(); const description = $('productDescription').value;
+    if (!name) { showToast('יש להזין שם מוצר.', 'error'); $('productName').focus(); return; }
+    const product = state.editingProduct; const priceManagedByChildren = !!product && ['variable', 'grouped'].includes(product.type);
+    let price = $('productPrice').value.trim();
+    if (!priceManagedByChildren && (!price || !Number.isFinite(Number(price)) || Number(price) < 0)) { showToast('יש להזין מחיר תקין (מספר שאינו שלילי).', 'error'); $('productPrice').focus(); return; }
+    if (state.selectedFile && (!state.settings.wpUsername || !state.settings.wpAppPassword)) { showToast('להעלאת תמונה צריך להגדיר שם משתמש וסיסמת יישום WordPress בהגדרות.', 'error'); return; }
+    state.productSaving = true; $('saveProduct').disabled = true; $('cancelModal').disabled = true; $('saveProduct').innerHTML = '<span class="spinner" aria-hidden="true"></span>שומר…';
+    try {
+      const body = { name, sku, description, type: product?.type || 'simple', status: product?.status || 'publish' };
+      // Do not accidentally unlink existing categories when the category endpoint could not be loaded.
+      if (state.categoriesLoaded) body.categories = selectedProductCategoryIds();
+      if (!priceManagedByChildren) body.regular_price = Number(price).toFixed(2);
+      if (state.selectedFile) {
+        $('imageUploadStatus').textContent = 'מעלה תמונה לספריית המדיה…';
+        const media = await wpMediaUpload(state.selectedFile);
+        const src = media && (media.source_url || media.guid?.rendered);
+        if (!media?.id || !validImageUrl(src)) throw new Error('WordPress קיבל את הקובץ אך לא החזיר פרטי תמונה תקינים.');
+        body.images = [{ id: media.id, src, alt: name }];
+      } else if (state.clearImage) body.images = [];
+      const saved = product
+        ? await wooRequest('/products/' + encodeURIComponent(product.id), { method: 'PUT', body: JSON.stringify(body) })
+        : await wooRequest('/products', { method: 'POST', body: JSON.stringify(body) });
+      if (!saved || !saved.id) throw new Error('השרת לא אישר את שמירת המוצר.');
+      const index = state.products.findIndex(p => Number(p.id) === Number(saved.id));
+      if (index >= 0) state.products[index] = saved; else state.products.unshift(saved);
+      state.hasLoaded = true; closeProductModal(); renderProducts(); showToast(product ? 'המוצר עודכן בהצלחה.' : 'המוצר נוצר בהצלחה.', 'success');
+      refreshCategories({ silent: true });
+    } catch (err) { showToast(err.message || 'שמירת המוצר נכשלה.', 'error'); }
+    finally { state.productSaving = false; $('saveProduct').disabled = false; $('cancelModal').disabled = false; $('saveProduct').textContent = state.editingProduct ? 'שמירת שינויים' : 'יצירת מוצר'; }
+  }
+  async function deleteProduct(product) {
+    if (!product?.id) return;
+    const yes = confirm(`למחוק לצמיתות את המוצר "${product.name || 'ללא שם'}"?\n\nהפעולה תמחק את המוצר מ־WooCommerce ולא ניתן לבטל אותה מכאן.`);
+    if (!yes) return;
+    try {
+      await wooRequest('/products/' + encodeURIComponent(product.id) + '?force=true', { method: 'DELETE' });
+      state.products = state.products.filter(p => Number(p.id) !== Number(product.id)); renderProducts(); showToast('המוצר נמחק מהחנות.', 'success');
+      if (state.editingProduct && Number(state.editingProduct.id) === Number(product.id)) closeProductModal();
+    } catch (err) { showToast('מחיקת המוצר נכשלה: ' + err.message, 'error'); }
+  }
+  function currentSettingsFromFields() {
+    return {
+      storeUrl: String($('storeUrl').value || '').trim(),
+      consumerKey: String($('consumerKey').value || '').trim(),
+      consumerSecret: String($('consumerSecret').value || '').trim(),
+      wpUsername: String($('wpUsername').value || '').trim(),
+      wpAppPassword: String($('wpAppPassword').value || '').trim()
+    };
+  }
+  function parseSettingsImport(raw) {
+    const input = String(raw || '').trim();
+    if (!input) throw new Error('הדבק תחילה טקסט הגדרות או JSON.');
+    let obj = null;
+    try { obj = JSON.parse(input); } catch {}
+    if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
+      if (obj.settings && typeof obj.settings === 'object') obj = obj.settings;
+      const norm = {};
+      const aliases = {
+        storeUrl: ['storeUrl','store_url','storeurl','siteUrl','site_url','url','store','כתובת חנות','כתובת החנות'],
+        consumerKey: ['consumerKey','consumer_key','consumerkey','ck','woocommerce_key','woocommerce_consumer_key'],
+        consumerSecret: ['consumerSecret','consumer_secret','consumersecret','cs','woocommerce_secret','woocommerce_consumer_secret'],
+        wpUsername: ['wpUsername','wp_username','wordpressUsername','wordpress_username','username','user'],
+        wpAppPassword: ['wpAppPassword','wp_app_password','applicationPassword','application_password','appPassword','app_password']
+      };
+      for (const [dest, keys] of Object.entries(aliases)) {
+        const key = Object.keys(obj).find(k => keys.some(a => String(a).toLowerCase() === String(k).toLowerCase()));
+        if (key !== undefined && obj[key] != null) norm[dest] = String(obj[key]).trim();
+      }
+      obj = norm;
+    } else {
+      obj = {};
+      const aliasMap = new Map();
+      const add = (dest, keys) => keys.forEach(k => aliasMap.set(k.toLowerCase().replace(/[^a-z0-9א-ת]/g, ''), dest));
+      add('storeUrl', ['STORE_URL','STORE URL','storeUrl','store_url','URL','כתובת חנות','כתובת החנות']);
+      add('consumerKey', ['CONSUMER_KEY','CONSUMER KEY','consumerKey','consumer_key','CK','WooCommerce Key']);
+      add('consumerSecret', ['CONSUMER_SECRET','CONSUMER SECRET','consumerSecret','consumer_secret','CS','WooCommerce Secret']);
+      add('wpUsername', ['WP_USERNAME','WP USERNAME','wpUsername','wp_username','WordPress Username','שם משתמש WordPress']);
+      add('wpAppPassword', ['WP_APP_PASSWORD','WP APP PASSWORD','wpAppPassword','wp_app_password','Application Password','סיסמת יישום']);
+      for (const line of input.split(/\r?\n/)) {
+        const clean = line.trim().replace(/^[-*]\s*/, '');
+        if (!clean || clean.startsWith('#') || /^woocommerce manager settings/i.test(clean)) continue;
+        const sepEq = clean.indexOf('='); const sepColon = clean.indexOf(':');
+        const sep = sepEq < 0 ? sepColon : sepColon < 0 ? sepEq : Math.min(sepEq, sepColon);
+        if (sep < 1) continue;
+        const key = clean.slice(0, sep).trim().replace(/^['"]|['"]$/g, '').toLowerCase().replace(/[^a-z0-9א-ת]/g, '');
+        const dest = aliasMap.get(key); if (!dest) continue;
+        let val = clean.slice(sep + 1).trim();
+        if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) val = val.slice(1, -1);
+        obj[dest] = val;
+      }
+    }
+    const result = {
+      storeUrl: String(obj.storeUrl || '').trim(), consumerKey: String(obj.consumerKey || '').trim(),
+      consumerSecret: String(obj.consumerSecret || '').trim(), wpUsername: String(obj.wpUsername || '').trim(),
+      wpAppPassword: String(obj.wpAppPassword || '').trim()
+    };
+    if (!result.storeUrl || !result.consumerKey || !result.consumerSecret) throw new Error('לא נמצאו כל שדות החובה. נדרשים STORE_URL, CONSUMER_KEY ו־CONSUMER_SECRET.');
+    result.storeUrl = normalizeStoreUrl(result.storeUrl);
+    return result;
+  }
+  function settingsAsText(s) {
+    return ['# WooCommerce Manager Settings', `STORE_URL=${s.storeUrl || ''}`, `CONSUMER_KEY=${s.consumerKey || ''}`, `CONSUMER_SECRET=${s.consumerSecret || ''}`, `WP_USERNAME=${s.wpUsername || ''}`, `WP_APP_PASSWORD=${s.wpAppPassword || ''}`].join('\n');
+  }
+  function transferSettings(format) {
+    const s = currentSettingsFromFields();
+    const text = format === 'json' ? JSON.stringify(s, null, 2) : settingsAsText(s);
+    $('settingsTransferText').value = text;
+    const copy = navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(text) : Promise.reject(new Error('העתקה אוטומטית אינה זמינה בדפדפן זה. הטקסט הוכן בתיבה — סמן והעתק ידנית.'));
+    copy.then(() => { $('settingsTransferStatus').textContent = 'ההגדרות הועתקו ללוח. שמור אותן במקום מאובטח בלבד.'; showToast('הגדרות הועתקו.', 'success'); }).catch(err => { $('settingsTransferStatus').textContent = err.message; $('settingsTransferText').focus(); $('settingsTransferText').select(); });
+  }
+  function importSettings() {
+    try {
+      const imported = parseSettingsImport($('settingsTransferText').value);
+      const previousStore = state.settings.storeUrl || '';
+      if (!saveLocalSettings(imported)) return;
+      if (previousStore !== imported.storeUrl) {
+        state.products = []; state.categories = []; state.categoriesLoaded = false; state.hasLoaded = false;
+        state.orders = []; state.ordersLoaded = false; state.analytics = null; state.analyticsLoaded = false;
+        state.lastSyncAt = 0; state.ordersLastSyncAt = 0; state.analyticsLastSyncAt = 0;
+        renderProducts(); renderCategories(); renderOrders(); renderAnalytics(); setConnectionPill(false);
+      }
+      fillSettingsForm(); $('settingsTransferStatus').textContent = 'ההגדרות יובאו ונשמרו מקומית. לחץ על ״בדיקת חיבור״ כדי לוודא שהן תקינות.';
+      $('settingsStatus').textContent = 'הגדרות יובאו. נדרשת בדיקת חיבור.'; setConnectionPill(false, 'נדרשת בדיקה');
+      showToast('ההגדרות נשמרו בדפדפן.', 'success');
+    } catch (err) { $('settingsTransferStatus').textContent = err.message || 'ייבוא ההגדרות נכשל.'; showToast(err.message || 'ייבוא ההגדרות נכשל.', 'error'); }
+  }
+  function downloadSettingsJson() {
+    const blob = new Blob([JSON.stringify(currentSettingsFromFields(), null, 2)], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'woocommerce-manager-settings.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    $('settingsTransferStatus').textContent = 'קובץ JSON נוצר. הוא מכיל פרטי גישה סודיים — שמור אותו באופן מאובטח.';
+  }
+  const ORDER_STATUS_LABELS = { pending: 'ממתינה לתשלום', processing: 'בטיפול', 'on-hold': 'בהמתנה', completed: 'הושלמה', cancelled: 'בוטלה', refunded: 'הוחזרה', failed: 'נכשלה', trash: 'באשפה' };
+  function orderStatusOptions(selected) {
+    return Object.entries(ORDER_STATUS_LABELS).filter(([key]) => key !== 'trash').map(([key, label]) => `<option value="${key}" ${key === selected ? 'selected' : ''}>${label}</option>`).join('');
+  }
+  function periodRange() {
+    const days = Math.max(1, Number($('analyticsPeriod')?.value || 30));
+    const end = new Date(); const start = new Date(end); start.setDate(start.getDate() - (days - 1));
+    return { days, dateMin: localDateString(start), dateMax: localDateString(end) };
+  }
+  function renderAnalytics() {
+    const a = state.analytics || {};
+    const sales = a.sales || {};
+    const set = (id, value) => { const el = $(id); if (el) el.textContent = value; };
+    if (state.analyticsLoading) ['grossSales','netSales','periodOrders','averageOrder','itemsSold','payingCustomers'].forEach(id => set(id, 'טוען…'));
+    else if (!state.analyticsLoaded) ['grossSales','netSales','periodOrders','averageOrder','itemsSold','payingCustomers'].forEach(id => set(id, '—'));
+    else {
+      if (a.salesAvailable) {
+        const gross = Number(sales.total_sales || 0), net = Number(sales.net_sales || 0), orders = Number(sales.total_orders || 0), items = Number(sales.total_items || 0);
+        set('grossSales', formatILS(gross)); set('netSales', formatILS(net)); set('periodOrders', orders.toLocaleString('he-IL'));
+        set('averageOrder', formatILS(orders ? net / orders : 0)); set('itemsSold', items.toLocaleString('he-IL'));
+      } else ['grossSales','netSales','periodOrders','averageOrder','itemsSold'].forEach(id => set(id, 'לא זמין'));
+      const paying = (a.customers || []).find(x => x.slug === 'paying'); set('payingCustomers', paying ? Number(paying.total || 0).toLocaleString('he-IL') : '—');
+    }
+    const chart = $('salesChart'); if (chart) {
+      chart.replaceChildren(); const totals = sales.totals && typeof sales.totals === 'object' ? Object.entries(sales.totals) : [];
+      if (!state.analyticsLoaded || !totals.length) { const empty = document.createElement('div'); empty.className = 'empty-state'; empty.textContent = state.analyticsLoading ? 'טוען נתוני מכירות…' : state.analyticsLoaded ? 'אין נתוני מכירות לתקופה שנבחרה.' : 'חבר את החנות כדי לטעון נתוני מכירות.'; chart.appendChild(empty); }
+      else {
+        const entries = totals.slice(-14); const max = Math.max(1, ...entries.map(([,v]) => Number(v.sales || 0)));
+        for (const [day, values] of entries) {
+          const row = document.createElement('div'); row.className = 'sales-bar-row';
+          const date = document.createElement('div'); date.textContent = day.slice(5); const track = document.createElement('div'); track.className = 'sales-bar-track';
+          const fill = document.createElement('div'); fill.className = 'sales-bar-fill'; fill.style.width = Math.max(0, Number(values.sales || 0) / max * 100) + '%'; track.appendChild(fill);
+          const amount = document.createElement('div'); amount.className = 'sales-bar-value'; amount.textContent = formatILS(values.sales || 0); row.append(date, track, amount); chart.appendChild(row);
+        }
+      }
+    }
+    const sellers = $('topSellers'); if (sellers) {
+      sellers.replaceChildren(); const rows = Array.isArray(a.topSellers) ? a.topSellers : [];
+      if (!rows.length) { const d = document.createElement('div'); d.className = 'loading-panel'; d.textContent = state.analyticsLoading ? 'טוען…' : state.analyticsLoaded ? 'אין נתוני מוצרים נמכרים לתקופה.' : 'חבר את החנות כדי לטעון נתונים.'; sellers.appendChild(d); }
+      else rows.slice(0, 8).forEach(item => { const row = document.createElement('div'); row.className = 'seller-row'; const name = document.createElement('span'); name.className = 'seller-name'; name.textContent = item.title || ('מוצר #' + item.product_id); const qty = document.createElement('span'); qty.className = 'seller-qty'; qty.textContent = Number(item.quantity || 0).toLocaleString('he-IL') + ' נמכרו'; row.append(name, qty); sellers.appendChild(row); });
+    }
+    const statuses = $('orderStatusSummary'); if (statuses) {
+      statuses.replaceChildren(); const rows = Array.isArray(a.orderTotals) ? a.orderTotals : [];
+      if (!rows.length) { const d = document.createElement('span'); d.className = 'muted'; d.textContent = state.analyticsLoading ? 'טוען…' : state.analyticsLoaded ? 'לא התקבל סיכום סטטוסים.' : 'חבר את החנות כדי לטעון נתונים.'; statuses.appendChild(d); }
+      else rows.forEach(item => { const chip = document.createElement('div'); chip.className = 'status-chip'; const label = document.createElement('span'); label.textContent = ORDER_STATUS_LABELS[item.slug] || item.name || item.slug; const count = document.createElement('b'); count.textContent = Number(item.total || 0).toLocaleString('he-IL'); chip.append(label, count); statuses.appendChild(chip); });
+    }
+    if ($('analyticsSyncLabel')) {
+      const when = state.analyticsLastSyncAt ? 'עדכון אחרון: ' + new Date(state.analyticsLastSyncAt).toLocaleString('he-IL') : 'נתוני המכירות ייטענו לאחר החיבור לחנות.';
+      $('analyticsSyncLabel').textContent = state.analytics?.errors?.length ? when + ' · חלק מהדוחות לא זמינים: ' + state.analytics.errors[0] : when;
+    }
+  }
+  async function refreshAnalytics(options = {}) {
+    const { silent = false } = options;
+    if (!hasWooSettings()) { if (!silent) showToast('הזן תחילה את פרטי החיבור.', 'error'); return false; }
+    if (state.analyticsLoading) return false;
+    const { dateMin, dateMax } = periodRange(); state.analyticsLoading = true; renderAnalytics();
+    const tasks = await Promise.allSettled([
+      wooRequest('/reports/sales?date_min=' + encodeURIComponent(dateMin) + '&date_max=' + encodeURIComponent(dateMax), { method: 'GET' }),
+      wooRequest('/reports/orders/totals', { method: 'GET' }),
+      wooRequest('/reports/top_sellers?date_min=' + encodeURIComponent(dateMin) + '&date_max=' + encodeURIComponent(dateMax), { method: 'GET' }),
+      wooRequest('/reports/customers/totals', { method: 'GET' })
+    ]);
+    const [salesR, ordersR, sellersR, customersR] = tasks;
+    const value = r => r.status === 'fulfilled' ? r.value : null;
+    const salesValue = value(salesR); state.analytics = {
+      sales: Array.isArray(salesValue) ? (salesValue[0] || {}) : {},
+      salesAvailable: Array.isArray(salesValue),
+      orderTotals: Array.isArray(value(ordersR)) ? value(ordersR) : [],
+      topSellers: Array.isArray(value(sellersR)) ? value(sellersR) : [],
+      customers: Array.isArray(value(customersR)) ? value(customersR) : [],
+      errors: tasks.map((r, i) => r.status === 'rejected' ? (r.reason?.message || 'שגיאה') : null).filter(Boolean)
+    };
+    state.analyticsLoaded = !!(salesValue || value(ordersR) || value(sellersR) || value(customersR));
+    state.analyticsLoading = false; state.analyticsLastSyncAt = Date.now(); renderAnalytics();
+    if (!state.analyticsLoaded && !silent) showToast('טעינת נתוני המכירות נכשלה. בדוק הרשאות API: ' + (state.analytics.errors[0] || ''), 'error');
+    else if (state.analytics.errors.length && !silent) showToast('חלק מנתוני הדוחות לא היו זמינים: ' + state.analytics.errors[0], '');
+    return state.analyticsLoaded;
+  }
+  function orderCustomerName(order) {
+    const b = order.billing || {}; const name = [b.first_name, b.last_name].filter(Boolean).join(' ').trim();
+    return name || (order.customer_id ? 'לקוח #' + order.customer_id : 'אורח');
+  }
+  function renderOrders() {
+    const wrap = $('ordersTableWrap'); if (!wrap) return;
+    const query = String($('orderSearch')?.value || '').trim().toLocaleLowerCase('he');
+    const status = $('orderStatusFilter')?.value || 'any';
+    const filtered = state.orders.filter(o => {
+      const hay = [o.number, o.id, orderCustomerName(o), o.billing?.email, o.billing?.phone].join(' ').toLocaleLowerCase('he');
+      return (!query || hay.includes(query)) && (status === 'any' || o.status === status);
+    });
+    $('ordersCount').textContent = state.ordersLoaded ? `מוצגות ${filtered.length.toLocaleString('he-IL')} מתוך ${state.orders.length.toLocaleString('he-IL')} ההזמנות שנטענו` : 'התחבר כדי לטעון הזמנות';
+    if (state.orderLoading) { wrap.innerHTML = '<div class="loading-panel"><span class="spinner"></span>טוען הזמנות…</div>'; return; }
+    if (!state.ordersLoaded) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">🧾</div><h3>ההזמנות עדיין לא נטענו</h3><p>התחבר לחנות כדי לראות נתוני קנייה.</p></div>'; return; }
+    if (!filtered.length) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">⌕</div><h3>לא נמצאו הזמנות</h3><p>נסה לשנות את החיפוש או את הסינון.</p></div>'; return; }
+    const rows = filtered.map(o => {
+      const name = orderCustomerName(o); const email = o.billing?.email || ''; const itemCount = (o.line_items || []).reduce((n, x) => n + Number(x.quantity || 0), 0);
+      return `<tr><td><span class="order-number">#${escapeHtml(o.number || o.id)}</span><div class="order-sub">${escapeHtml(formatDate(o.date_created))}</div></td><td><div class="order-customer">${escapeHtml(name)}</div><div class="order-sub">${escapeHtml(email)}</div></td><td>${itemCount.toLocaleString('he-IL')} פריטים<div class="order-sub">${(o.line_items || []).length} מוצרים שונים</div></td><td><span class="status-chip">${escapeHtml(ORDER_STATUS_LABELS[o.status] || o.status || '—')}</span></td><td class="order-total">${formatILS(o.total || 0)}</td><td><select class="order-status-select" data-order-status="${Number(o.id)}" aria-label="סטטוס להזמנה ${escapeHtml(o.number || o.id)}">${orderStatusOptions(o.status)}</select></td><td class="order-actions-cell"><button class="btn btn-secondary btn-sm" data-order-details="${Number(o.id)}">פרטים</button> <button class="btn btn-primary btn-sm" data-order-save="${Number(o.id)}">עדכון</button></td></tr>`;
+    }).join('');
+    wrap.innerHTML = `<div class="orders-table-wrap"><table class="orders-table"><thead><tr><th>הזמנה</th><th>לקוח</th><th>פריטים</th><th>סטטוס נוכחי</th><th>סכום</th><th>שינוי סטטוס</th><th>פעולות</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    $('ordersSyncLabel').textContent = state.ordersLastSyncAt ? 'עודכן: ' + new Date(state.ordersLastSyncAt).toLocaleString('he-IL') + ' · מוצגות עד 50 הזמנות אחרונות' : 'ההזמנות נטענו.';
+  }
+  async function refreshOrders(options = {}) {
+    const { silent = false } = options;
+    if (!hasWooSettings()) { if (!silent) showToast('הזן תחילה את פרטי החיבור.', 'error'); return false; }
+    if (state.orderLoading) return false;
+    state.orderLoading = true; renderOrders(); if ($('refreshOrders')) $('refreshOrders').disabled = true;
+    try {
+      const filter = $('orderStatusFilter')?.value || 'any';
+      const path = '/orders?per_page=50&page=1&orderby=date&order=desc' + (filter !== 'any' ? '&status=' + encodeURIComponent(filter) : '');
+      const data = await wooRequest(path, { method: 'GET' });
+      if (!Array.isArray(data)) throw new Error('השרת החזיר תשובה לא תקינה ברשימת ההזמנות.');
+      state.orders = data; state.ordersLoaded = true; state.ordersLastSyncAt = Date.now(); renderOrders(); return true;
+    } catch (err) { if (!silent) showToast('טעינת ההזמנות נכשלה: ' + (err.message || 'שגיאת שרת'), 'error'); if (!state.ordersLoaded) { state.orders = []; renderOrders(); } return false; }
+    finally { state.orderLoading = false; if ($('refreshOrders')) $('refreshOrders').disabled = false; renderOrders(); }
+  }
+  async function saveOrderStatus(id) {
+    const order = state.orders.find(o => Number(o.id) === Number(id)); const select = document.querySelector(`[data-order-status="${Number(id)}"]`);
+    if (!order || !select) return; const next = select.value;
+    if (next === order.status) { showToast('לא בוצע שינוי בסטטוס.', ''); return; }
+    if (!confirm(`לעדכן את הזמנה #${order.number || order.id} לסטטוס "${ORDER_STATUS_LABELS[next] || next}"?`)) { select.value = order.status; return; }
+    try {
+      const saved = await wooRequest('/orders/' + encodeURIComponent(order.id), { method: 'PUT', body: JSON.stringify({ status: next }) });
+      const index = state.orders.findIndex(o => Number(o.id) === Number(saved.id)); if (index >= 0) state.orders[index] = saved;
+      renderOrders(); showToast('סטטוס ההזמנה עודכן בחנות.', 'success'); refreshAnalytics({ silent: true });
+    } catch (err) { select.value = order.status; showToast('עדכון ההזמנה נכשל: ' + err.message, 'error'); }
+  }
+  function openOrderDetails(order) {
+    if (!order) return; state.selectedOrder = order;
+    const billing = order.billing || {}, shipping = order.shipping || {};
+    const address = x => [x.address_1, x.address_2, x.city, x.state, x.postcode, x.country].filter(Boolean).join(', ');
+    const lines = (order.line_items || []).map(item => `<tr><td>${escapeHtml(item.name || '')}</td><td>${Number(item.quantity || 0)}</td><td>${formatILS(item.total || 0)}</td></tr>`).join('');
+    const fees = (order.fee_lines || []).map(item => `<tr><td>${escapeHtml(item.name || 'עמלה')}</td><td>—</td><td>${formatILS(item.total || 0)}</td></tr>`).join('');
+    $('orderModalBody').innerHTML = `<div class="order-detail-grid"><div class="order-detail-box"><h4>פרטי לקוח</h4><p><b>${escapeHtml(orderCustomerName(order))}</b></p><p>${escapeHtml(billing.email || 'אין אימייל')}</p><p>${escapeHtml(billing.phone || 'אין טלפון')}</p><p>${escapeHtml(address(billing) || 'אין כתובת חיוב')}</p></div><div class="order-detail-box"><h4>משלוח ותשלום</h4><p>${escapeHtml(address(shipping) || 'אין כתובת משלוח')}</p><p>אמצעי תשלום: ${escapeHtml(order.payment_method_title || '—')}</p><p>משלוח: ${escapeHtml((order.shipping_lines || []).map(x => x.method_title).join(', ') || '—')}</p><p>הערת לקוח: ${escapeHtml(order.customer_note || '—')}</p></div></div><div class="order-detail-box"><h4>פריטים בהזמנה</h4><table class="order-lines"><thead><tr><th>מוצר</th><th>כמות</th><th>סכום</th></tr></thead><tbody>${lines || '<tr><td colspan="3">אין פריטים להצגה</td></tr>'}${fees}</tbody></table><div class="order-detail-total"><span>סכום ביניים</span><span>${formatILS(order.total || 0)}</span></div><div class="order-detail-total"><span>סטטוס</span><span>${escapeHtml(ORDER_STATUS_LABELS[order.status] || order.status)}</span></div><div class="order-sub">נוצרה: ${escapeHtml(formatDate(order.date_created))} · מספר מזהה: ${Number(order.id)}</div></div>`;
+    $('orderModalTitle').textContent = 'הזמנה #' + (order.number || order.id); $('orderModal').classList.add('open'); document.body.classList.add('no-scroll');
+  }
+  function exportOrdersCsv() {
+    if (!state.ordersLoaded || !state.orders.length) { showToast('אין הזמנות שיוצאו. טען תחילה את ההזמנות.', 'error'); return; }
+    const query = String($('orderSearch')?.value || '').trim().toLocaleLowerCase('he');
+    const status = $('orderStatusFilter')?.value || 'any';
+    const visibleOrders = state.orders.filter(o => {
+      const hay = [o.number, o.id, orderCustomerName(o), o.billing?.email, o.billing?.phone].join(' ').toLocaleLowerCase('he');
+      return (!query || hay.includes(query)) && (status === 'any' || o.status === status);
+    });
+    if (!visibleOrders.length) { showToast('אין הזמנות התואמות לסינון הנוכחי.', 'error'); return; }
+    const cols = ['מספר הזמנה','תאריך','שם לקוח','אימייל','טלפון','סטטוס','מטבע','סכום','מספר פריטים','אמצעי תשלום'];
+    const q = value => '"' + String(value ?? '').replace(/"/g, '""').replace(/[\r\n]+/g, ' ') + '"';
+    const rows = visibleOrders.map(o => [o.number || o.id, o.date_created || '', orderCustomerName(o), o.billing?.email || '', o.billing?.phone || '', ORDER_STATUS_LABELS[o.status] || o.status, o.currency || 'ILS', o.total || '0', (o.line_items || []).reduce((n, x) => n + Number(x.quantity || 0), 0), o.payment_method_title || '']);
+    const csv = '\ufeff' + [cols, ...rows].map(row => row.map(q).join(',')).join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'woocommerce-orders-' + localDateString() + '.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast('קובץ CSV של ההזמנות המוצגות נוצר.', 'success');
+  }
+  async function refreshAllData() {
+    if (!hasWooSettings()) return;
+    const tasks = [refreshProducts(), refreshAnalytics({ silent: true }), refreshOrders({ silent: true })];
+    await Promise.allSettled(tasks);
+  }
+  function clearLocalSettings() {
+    if (!confirm('למחוק מהדפדפן את כתובת החנות וכל פרטי החיבור השמורים? פעולה זו לא מוחקת מוצרים ב־WooCommerce.')) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+    state.settings = { storeUrl: '', consumerKey: '', consumerSecret: '', wpUsername: '', wpAppPassword: '' }; state.products = []; state.categories = []; state.categoriesLoaded = false; state.hasLoaded = false; state.orders = []; state.ordersLoaded = false; state.analytics = null; state.analyticsLoaded = false; state.analyticsLoading = false; state.orderLoading = false; state.connected = false; state.lastSyncAt = 0; state.ordersLastSyncAt = 0; state.analyticsLastSyncAt = 0;
+    fillSettingsForm(); setConnectionPill(false); renderProducts(); renderCategories(); renderOrders(); renderAnalytics(); $('settingsStatus').textContent = 'פרטי החיבור נמחקו מהדפדפן.'; showToast('פרטי החיבור המקומיים נמחקו.', 'success');
+  }
+  function registerPwa() {
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      navigator.serviceWorker.register('./sw.js').then(() => { /* Offline shell is ready. */ }).catch(() => { /* The app still works online without a service worker. */ });
+    }
+    window.addEventListener('beforeinstallprompt', event => { event.preventDefault(); state.installPrompt = event; $('installApp').classList.remove('hidden'); });
+    window.addEventListener('appinstalled', () => { state.installPrompt = null; $('installApp').classList.add('hidden'); showToast('האפליקציה הותקנה במכשיר.', 'success'); });
+  }
+  function init() {
+    fillSettingsForm(); setConnectionPill(false); renderStats();
+    document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => showView(b.dataset.view)));
+    document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => showView(b.dataset.go)));
+    $('topSettings').addEventListener('click', () => showView('settings'));
+    $('bannerSettings').addEventListener('click', () => showView('settings'));
+    $('bannerHelp').addEventListener('click', () => showView('help'));
+    $('mobileMenu').addEventListener('click', openMobileMenu); $('sidebarScrim').addEventListener('click', closeMobileMenu);
+    $('refreshProducts').addEventListener('click', refreshProducts); $('addProduct').addEventListener('click', () => openProductModal());
+    $('refreshAnalytics').addEventListener('click', () => refreshAnalytics()); $('analyticsPeriod').addEventListener('change', () => refreshAnalytics());
+    $('refreshOrders').addEventListener('click', () => refreshOrders()); $('orderSearch').addEventListener('input', renderOrders); $('orderStatusFilter').addEventListener('change', () => refreshOrders()); $('exportOrdersCsv').addEventListener('click', exportOrdersCsv);
+    $('ordersTableWrap').addEventListener('click', e => { const detail = e.target.closest('[data-order-details]'); const save = e.target.closest('[data-order-save]'); if (detail) openOrderDetails(state.orders.find(o => Number(o.id) === Number(detail.dataset.orderDetails))); if (save) saveOrderStatus(save.dataset.orderSave); });
+    $('importSettings').addEventListener('click', importSettings); $('exportSettingsText').addEventListener('click', () => transferSettings('text')); $('exportSettingsJson').addEventListener('click', () => transferSettings('json')); $('downloadSettingsJson').addEventListener('click', downloadSettingsJson);
+    $('installApp').addEventListener('click', async () => { if (!state.installPrompt) { showToast('התקנת האפליקציה זמינה מתפריט הדפדפן: ״התקן אפליקציה״ או ״הוסף למסך הבית״.', ''); return; } state.installPrompt.prompt(); await state.installPrompt.userChoice; state.installPrompt = null; $('installApp').classList.add('hidden'); });
+    $('closeOrderModal').addEventListener('click', () => { $('orderModal').classList.remove('open'); document.body.classList.remove('no-scroll'); }); $('orderModal').addEventListener('click', e => { if (e.target === $('orderModal')) { $('orderModal').classList.remove('open'); document.body.classList.remove('no-scroll'); } });
+    $('refreshCategories').addEventListener('click', () => refreshCategories()); $('categoryCreateForm').addEventListener('submit', createCategory);
+    $('searchProducts').addEventListener('input', renderProducts);
+    $('saveSettings').addEventListener('click', () => testAndConnect(true)); $('testConnection').addEventListener('click', () => testAndConnect(true));
+    $('clearSettings').addEventListener('click', clearLocalSettings);
+    document.querySelectorAll('.toggle-secret').forEach(b => b.addEventListener('click', () => { const input = $(b.dataset.target); const isPassword = input.type === 'password'; input.type = isPassword ? 'text' : 'password'; b.textContent = isPassword ? 'הסתר' : 'הצג'; }));
+    $('chooseImage').addEventListener('click', () => $('productImageInput').click()); $('productImageInput').addEventListener('change', e => chooseImageFile(e.target.files?.[0]));
+    $('removeImage').addEventListener('click', () => { revokePreviewUrl(); state.selectedFile = null; state.clearImage = true; $('productImageInput').value = ''; $('imagePreview').src = 'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27100%27 height=%27100%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%279%27 fill=%27%23f5f7fa%27/%3E%3Cpath d=%27M23 68l17-19 12 12 10-11 16 18H23z%27 fill=%27%23d2d9e3%27/%3E%3Ccircle cx=%2737%27 cy=%2734%27 r=%277%27 fill=%27%23d2d9e3%27/%3E%3C/svg%3E'; $('removeImage').classList.add('hidden'); $('imageUploadStatus').textContent = 'התמונה תוסר מהמוצר בשמירה.'; });
+    $('productForm').addEventListener('submit', saveProduct); $('closeModal').addEventListener('click', closeProductModal); $('cancelModal').addEventListener('click', closeProductModal);
+    $('productModal').addEventListener('click', e => { if (e.target === $('productModal')) closeProductModal(); });
+    $('deleteFromModal').addEventListener('click', () => { const p = state.editingProduct; if (p) deleteProduct(p); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeMobileMenu(); if ($('productModal').classList.contains('open')) closeProductModal(); if ($('orderModal').classList.contains('open')) { $('orderModal').classList.remove('open'); document.body.classList.remove('no-scroll'); } } });
+    // Keep automatic sync enabled even when credentials are entered after the first page load.
+    state.autoSyncTimer = window.setInterval(() => { if (!document.hidden && hasWooSettings() && !state.loading && !state.analyticsLoading && !state.orderLoading) refreshAllData(); }, 5 * 60 * 1000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && hasWooSettings() && !state.loading && Date.now() - state.lastSyncAt > 2 * 60 * 1000) refreshAllData(); });
+    registerPwa();
+    if (hasWooSettings()) {
+      // Credentials are loaded only from this browser's local storage; they are never embedded in the HTML.
+      setConnectionPill(false, 'מתחבר…'); refreshAllData();
+    } else {
+      setConnectionPill(false); showView('help');
+    }
+  }
+  init();
+})();
+</script>
+</body>
+</html>
