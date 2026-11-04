@@ -74,7 +74,16 @@
     @media(max-width:760px){.home-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.settings-import-tools{align-items:flex-start;flex-wrap:wrap}.settings-import-copy{flex:1 1 calc(100% - 70px)}.settings-import-actions{width:100%}.settings-import-actions .btn{flex:1}.home-order-row{grid-template-columns:minmax(0,1fr) auto;gap:7px 12px}.home-order-meta{grid-column:1}.home-order-total{grid-column:2;grid-row:1}.home-status{grid-column:2;grid-row:2;justify-self:end}}
     @media(max-width:390px){.home-shortcuts{grid-template-columns:1fr}.home-stats{grid-template-columns:1fr 1fr}.home-stats .stat-number{font-size:18px}}
 
-  </style>
+  
+  .order-products-summary{max-width:280px;white-space:normal;line-height:1.45;color:var(--muted,#667085)}
+  .order-status-editor{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--border,#e5e7eb)}
+  .order-status-editor label{font-weight:700;font-size:13px}
+  .order-status-editor select{min-width:170px}
+  .btn-danger{background:#fff1f0!important;color:#b42318!important;border:1px solid #fecdca!important}
+  .btn-danger:hover{background:#fee4e2!important}
+  .order-actions-cell{white-space:nowrap}
+  @media(max-width:760px){.order-actions-cell{white-space:normal}.order-products-summary{max-width:190px}.order-status-editor{align-items:stretch}.order-status-editor select{flex:1}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -110,9 +119,9 @@
         <div class="page-heading"><div><h1>מסך הבית</h1><p>סיכום מהיר של מצב החנות והקניות האחרונות.</p><div class="category-last-sync" id="homeSyncLabel">נתוני החנות יופיעו לאחר החיבור.</div></div><div class="heading-actions"><button class="btn btn-secondary" id="refreshHome"><span data-icon="refresh-cw"></span> רענון סיכום</button><button class="btn btn-primary" data-go="analytics"><span data-icon="chart-line"></span> סטטיסטיקות מלאות</button></div></div>
         <div class="welcome-banner home-welcome" id="homeConnectBanner"><div class="welcome-copy"><h2>ברוך הבא למנהל החנות</h2><p>כאן תראה במבט מהיר את המכירות, ההזמנות שממתינות לטיפול והרכישות האחרונות. לניתוח מפורט אפשר לעבור לסטטיסטיקות המלאות.</p><div class="heading-actions" style="margin-top:14px"><button class="btn btn-primary btn-sm" id="homeBannerSettings"><span data-icon="key-round"></span> הגדרת חיבור</button><button class="btn btn-secondary btn-sm" data-go="help"><span data-icon="book-open"></span> מדריך הפעלה</button></div></div><div class="welcome-illustration" data-icon="store" data-icon-size="42"></div></div>
         <div class="stats home-stats">
-          <div class="stat-card"><div class="stat-top"><span>מכירות ב־7 ימים</span><span class="stat-icon" data-icon="wallet"></span></div><div class="stat-number" id="homeSales7">—</div><div class="stat-sub">סך מכירות לפי דוח החנות</div></div>
-          <div class="stat-card"><div class="stat-top"><span>הזמנות ב־7 ימים</span><span class="stat-icon" data-icon="receipt"></span></div><div class="stat-number" id="homeOrders7">—</div><div class="stat-sub">מספר הזמנות בתקופה האחרונה</div></div>
-          <div class="stat-card"><div class="stat-top"><span>ממוצע להזמנה</span><span class="stat-icon" data-icon="chart-line"></span></div><div class="stat-number" id="homeAverage7">—</div><div class="stat-sub">מכירות חלקי מספר הזמנות</div></div>
+          <div class="stat-card"><div class="stat-top"><span>מכירות ב־7 ימים</span><span class="stat-icon" data-icon="wallet"></span></div><div class="stat-number" id="homeSales7">—</div><div class="stat-sub">רק הזמנות בטיפול או שהושלמו, לאחר החזרים</div></div>
+          <div class="stat-card"><div class="stat-top"><span>הזמנות ב־7 ימים</span><span class="stat-icon" data-icon="receipt"></span></div><div class="stat-number" id="homeOrders7">—</div><div class="stat-sub">רק הזמנות בטיפול או שהושלמו</div></div>
+          <div class="stat-card"><div class="stat-top"><span>ממוצע להזמנה</span><span class="stat-icon" data-icon="chart-line"></span></div><div class="stat-number" id="homeAverage7">—</div><div class="stat-sub">הכנסות לאחר החזרים חלקי מספר הזמנות ששולמו</div></div>
           <div class="stat-card"><div class="stat-top"><span>הזמנות פתוחות</span><span class="stat-icon" data-icon="activity"></span></div><div class="stat-number" id="homeOpenOrders">—</div><div class="stat-sub">ממתינות, בטיפול או בהמתנה</div></div>
         </div>
         <div class="panel home-recent-panel"><div class="panel-heading"><div><h2>ההזמנות האחרונות</h2><p>הזמנות אחרונות שנמשכו מהחנות.</p></div><button class="btn btn-secondary btn-sm" data-go="orders">לכל ההזמנות <span data-icon="arrow-left"></span></button></div><div id="homeRecentOrders" class="home-recent-list"><div class="empty-state"><div class="empty-icon" data-icon="receipt"></div><h3>אין עדיין נתוני הזמנות</h3><p>לאחר חיבור החנות יופיעו כאן הרכישות האחרונות.</p></div></div></div>
@@ -121,22 +130,22 @@
       <section id="analyticsView" class="view">
         <div class="page-heading"><div><h1>סטטיסטיקות מלאות</h1><p>ניתוח מעמיק של מכירות, הזמנות, מוצרים ולקוחות בחנות.</p><div class="category-last-sync" id="analyticsSyncLabel">נתוני המכירות ייטענו לאחר החיבור לחנות.</div></div><div class="heading-actions"><select id="analyticsPeriod" class="filter-select" aria-label="טווח נתוני מכירות"><option value="7">7 ימים אחרונים</option><option value="30" selected>30 ימים אחרונים</option><option value="90">90 ימים אחרונים</option><option value="365">12 חודשים אחרונים</option></select><button class="btn btn-secondary" id="refreshAnalytics"><span data-icon="refresh-cw"></span> רענון נתונים</button></div></div>
         <div class="stats analytics-kpis">
-          <div class="stat-card"><div class="stat-top"><span>מכירות ברוטו</span><span class="stat-icon" data-icon="wallet"></span></div><div class="stat-number" id="grossSales">—</div><div class="stat-sub">מחזור ברוטו לפי דוח WooCommerce</div></div>
-          <div class="stat-card"><div class="stat-top"><span>מכירות נטו</span><span class="stat-icon" data-icon="chart-line"></span></div><div class="stat-number" id="netSales">—</div><div class="stat-sub">לפי דוח המכירות הרשמי של החנות</div></div>
-          <div class="stat-card"><div class="stat-top"><span>הזמנות בתקופה</span><span class="stat-icon" data-icon="receipt"></span></div><div class="stat-number" id="periodOrders">—</div><div class="stat-sub">מספר ההזמנות בתקופה שנבחרה</div></div>
-          <div class="stat-card"><div class="stat-top"><span>ממוצע להזמנה</span><span class="stat-icon" data-icon="activity"></span></div><div class="stat-number" id="averageOrder">—</div><div class="stat-sub">מכירות נטו חלקי מספר הזמנות</div></div>
-          <div class="stat-card"><div class="stat-top"><span>פריטים שנמכרו</span><span class="stat-icon" data-icon="package"></span></div><div class="stat-number" id="itemsSold">—</div><div class="stat-sub">כמות יחידות לפי דוח המכירות</div></div>
+          <div class="stat-card"><div class="stat-top"><span>סך הזמנות ששולמו</span><span class="stat-icon" data-icon="wallet"></span></div><div class="stat-number" id="grossSales">—</div><div class="stat-sub">סכום הזמנות בטיפול/הושלמו כולל מס ומשלוח, לפני החזרים</div></div>
+          <div class="stat-card"><div class="stat-top"><span>הכנסות אחרי החזרים</span><span class="stat-icon" data-icon="chart-line"></span></div><div class="stat-number" id="netSales">—</div><div class="stat-sub">סכום ההזמנות ששולמו לאחר ניכוי החזרים שנרשמו</div></div>
+          <div class="stat-card"><div class="stat-top"><span>הזמנות בתקופה</span><span class="stat-icon" data-icon="receipt"></span></div><div class="stat-number" id="periodOrders">—</div><div class="stat-sub">הזמנות ששולמו בלבד; לא כולל בוטלו, נכשלו או ממתינות</div></div>
+          <div class="stat-card"><div class="stat-top"><span>ממוצע להזמנה</span><span class="stat-icon" data-icon="activity"></span></div><div class="stat-number" id="averageOrder">—</div><div class="stat-sub">סכום לאחר החזרים חלקי הזמנות ששולמו</div></div>
+          <div class="stat-card"><div class="stat-top"><span>פריטים שנמכרו</span><span class="stat-icon" data-icon="package"></span></div><div class="stat-number" id="itemsSold">—</div><div class="stat-sub">כמות יחידות בהזמנות ששולמו בלבד</div></div>
           <div class="stat-card"><div class="stat-top"><span>לקוחות משלמים</span><span class="stat-icon" data-icon="users"></span></div><div class="stat-number" id="payingCustomers">—</div><div class="stat-sub">סך כל הלקוחות המשלמים בחנות</div></div>
         </div>
         <div class="analytics-columns">
-          <div class="panel"><div class="panel-heading"><div><h2>מכירות לאורך התקופה</h2><p>חלוקה יומית לפי נתוני הדוח של WooCommerce.</p></div><span class="section-tag">₪</span></div><div id="salesChart" class="sales-chart"><div class="empty-state"><p>חבר את החנות כדי לטעון נתונים.</p></div></div></div>
-          <div class="panel"><div class="panel-heading"><div><h2>המוצרים הנמכרים ביותר</h2><p>על פי דוח המוצרים הנמכרים בתקופה.</p></div></div><div id="topSellers" class="top-sellers"><div class="loading-panel">הנתונים יופיעו אחרי החיבור.</div></div></div>
+          <div class="panel"><div class="panel-heading"><div><h2>מכירות לאורך התקופה</h2><p>חלוקה יומית מהזמנות ששולמו בלבד.</p></div><span class="section-tag">₪</span></div><div id="salesChart" class="sales-chart"><div class="empty-state"><p>חבר את החנות כדי לטעון נתונים.</p></div></div></div>
+          <div class="panel"><div class="panel-heading"><div><h2>המוצרים הנמכרים ביותר</h2><p>סיכום שורות המוצרים בהזמנות ששולמו בלבד.</p></div></div><div id="topSellers" class="top-sellers"><div class="loading-panel">הנתונים יופיעו אחרי החיבור.</div></div></div>
         </div>
         <div class="panel"><div class="panel-heading"><div><h2>מצב ההזמנות בחנות</h2><p>חלוקה לפי סטטוס — כלל ההזמנות, לא רק התקופה שנבחרה.</p></div><button class="btn btn-secondary btn-sm" data-go="orders"><span data-icon="receipt"></span> ניהול הזמנות</button></div><div id="orderStatusSummary" class="status-summary"><span class="muted">הנתונים יופיעו אחרי החיבור.</span></div></div>
-        <div class="alert info"><span class="alert-icon" data-icon="info"></span><div>נתוני המכירות נמשכים מדוחות WooCommerce. זמינותם תלויה בהרשאות REST API ובתוספים הפעילים בחנות. נתוני לקוחות מוצגים כסיכום בלבד; מידע אישי על לקוחות זמין במסך פרטי ההזמנה.</div></div>
+        <div class="alert info"><span class="alert-icon" data-icon="info"></span><div>הכנסות ומוצרים נמכרים מחושבים מהזמנות בסטטוס בטיפול או הושלמה בלבד. הזמנות ממתינות לתשלום, בהמתנה, מבוטלות, נכשלות או מוחזרות אינן נספרות כהכנסה. החזר חלקי מופחת מהמכירות נטו. נתוני המכירות נמשכים מדוחות WooCommerce. זמינותם תלויה בהרשאות REST API ובתוספים הפעילים בחנות. נתוני לקוחות מוצגים כסיכום בלבד; מידע אישי על לקוחות זמין במסך פרטי ההזמנה.</div></div>
       </section>
       <section id="ordersView" class="view">
-        <div class="page-heading"><div><h1>הזמנות וקניות</h1><p>צפייה בפרטי הזמנה, חיפוש, סינון ועדכון סטטוס ישירות בחנות.</p><div class="category-last-sync" id="ordersSyncLabel">ההזמנות ייטענו לאחר החיבור.</div></div><div class="heading-actions"><button class="btn btn-secondary" id="exportOrdersCsv"><span data-icon="download"></span> ייצוא CSV</button><button class="btn btn-primary" id="refreshOrders"><span data-icon="refresh-cw"></span> רענון הזמנות</button></div></div>
+        <div class="page-heading"><div><h1>הזמנות וקניות</h1><p>צפייה בפרטי הזמנה, חיפוש, סינון ועדכון סטטוס ישירות בחנות.</p><div class="category-last-sync" id="ordersSyncLabel">ההזמנות ייטענו לאחר החיבור.</div></div><div class="heading-actions"><button class="btn btn-secondary" id="exportOrdersCsv"><span data-icon="download"></span> ייצוא CSV</button><button class="btn btn-secondary hidden" id="loadMoreOrders" disabled><span data-icon="chevrons-down"></span> טען עוד הזמנות</button><button class="btn btn-primary" id="refreshOrders"><span data-icon="refresh-cw"></span> רענון הזמנות</button></div></div>
         <div class="panel orders-toolbar-panel"><div class="orders-toolbar"><div class="searchbox"><span data-icon="search"></span><input id="orderSearch" type="search" placeholder="חיפוש לפי מספר הזמנה, שם או אימייל…" autocomplete="off" aria-label="חיפוש הזמנות"></div><select id="orderStatusFilter" class="filter-select" aria-label="סינון לפי סטטוס"><option value="any">כל הסטטוסים</option><option value="pending">ממתינה לתשלום</option><option value="processing">בטיפול</option><option value="on-hold">בהמתנה</option><option value="completed">הושלמה</option><option value="cancelled">בוטלה</option><option value="refunded">הוחזרה</option><option value="failed">נכשלה</option></select></div><div class="orders-count" id="ordersCount">עדיין לא נטענו הזמנות.</div></div>
         <div class="panel orders-table-panel"><div id="ordersTableWrap"><div class="loading-panel">התחבר לחנות כדי לטעון הזמנות.</div></div></div>
         <div class="alert warning"><span class="alert-icon" data-icon="lock"></span><div>במסך זה עשויים להופיע פרטי קשר וכתובות של לקוחות. השתמש בו רק במכשיר פרטי ומוגן, אל תשתף צילומי מסך עם פרטים אישיים, והימנע משמירת פרטי החיבור בדפדפן משותף.</div></div>
@@ -175,6 +184,8 @@
             <div class="field"><label for="consumerSecret">Consumer Secret <span class="required">*</span></label><div class="input-with-action"><input id="consumerSecret" type="password" placeholder="cs_…" autocomplete="new-password" spellcheck="false"><button type="button" class="btn btn-secondary btn-sm toggle-secret" data-target="consumerSecret">הצג</button></div></div>
           </div>
           <div class="alert info"><span class="alert-icon" data-icon="info"></span><div><strong>יצירת מפתחות:</strong> בלוח הניהול של WordPress היכנס ל־<b>WooCommerce ← הגדרות ← מתקדם ← REST API</b>, לחץ על הוספת מפתח, בחר משתמש והרשאת <b>Read/Write</b>, והעתק לכאן את ה־Consumer Key וה־Consumer Secret.</div></div>
+          <div class="field full-row" style="margin-top:14px"><label for="wooAuthMode">שיטת אימות WooCommerce</label><select id="wooAuthMode" class="filter-select" style="width:100%;max-width:100%"><option value="auto">אוטומטי — כותרת Authorization, ואם נכשל 401 ניסיון Query String חד־פעמי</option><option value="header">כותרת Authorization בלבד</option><option value="query">Query String בלבד — למקרה שהשרת מסיר כותרות Authorization</option></select><small>המצב האוטומטי בודק קודם את שיטת האימות הרגילה. אם מתקבלת שגיאת 401, הוא בודק פעם אחת את השיטה החלופית, ורק אם הצליחה משתמש בהמשך הסנכרון.</small></div>
+          <div class="alert warning"><span class="alert-icon" data-icon="shield-check"></span><div><strong>הערת אבטחה:</strong> בשיטת Query String המפתחות נשלחים כחלק מכתובת הבקשה. החיבור מוצפן ב־HTTPS, אך כתובות עשויות להופיע ביומני שרת/Proxy. השתמש באפשרות זו רק אם שיטת הכותרת לא עובדת, והימנע משיתוף יומני בקשות או צילומי מסך.</div></div>
         </div>
         <div class="panel">
           <div class="panel-heading"><div><h2>העלאת תמונות מהמחשב</h2><p>נדרש רק אם רוצים להעלות תמונה חדשה או להחליף תמונה קיימת.</p></div><span class="section-tag">אופציונלי, מומלץ</span></div>
@@ -205,14 +216,16 @@
   "consumerKey": "ck_...",
   "consumerSecret": "cs_...",
   "wpUsername": "wordpress-login-name",
-  "wpAppPassword": "xxxx xxxx xxxx xxxx xxxx xxxx"
+  "wpAppPassword": "xxxx xxxx xxxx xxxx xxxx xxxx",
+  "wooAuthMode": "auto"
 }</pre>
             <p style="font-size:12px;color:#667085;margin:10px 0 6px">או טקסט פשוט להדבקה:</p>
             <pre dir="ltr" style="white-space:pre-wrap;overflow-wrap:anywhere;background:#fff;border:1px solid #e3e9f1;border-radius:8px;padding:12px;font-size:11px">STORE_URL=https://mulahafakot.com
 CONSUMER_KEY=ck_...
 CONSUMER_SECRET=cs_...
 WP_USERNAME=wordpress-login-name
-WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx</pre>
+WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx
+WOO_AUTH_MODE=auto</pre>
             <div style="font-size:12px;line-height:1.7;color:#475467">
               <b>שמות המפתחות:</b><br>
               <code>storeUrl</code> / <code>store_url</code> / <code>siteUrl</code> — כתובת החנות.<br>
@@ -248,7 +261,7 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx</pre>
 
 
 <div class="modal-backdrop" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
-  <div class="modal"><div class="modal-header"><div><h2 id="orderModalTitle">פרטי הזמנה</h2><p>פרטי הקנייה שסונכרנו מ־WooCommerce.</p></div><button class="btn-icon" id="closeOrderModal" aria-label="סגירה"><span data-icon="x"></span></button></div><div class="modal-body" id="orderModalBody"></div><div class="modal-footer"><div></div><div class="actions"><button type="button" class="btn btn-primary" id="closeOrderModalFooter" onclick="document.getElementById('orderModal').classList.remove('open');document.body.classList.remove('no-scroll')">סגירה</button></div></div></div>
+  <div class="modal"><div class="modal-header"><div><h2 id="orderModalTitle">פרטי הזמנה</h2><p>פרטי הקנייה שסונכרנו מ־WooCommerce.</p></div><button class="btn-icon" id="closeOrderModal" aria-label="סגירה"><span data-icon="x"></span></button></div><div class="modal-body" id="orderModalBody"></div><div class="modal-footer"><button type="button" class="btn btn-danger" id="deleteOrderFromModal"><span data-icon="trash-2"></span> מחיקה לצמיתות</button><div class="actions"><button type="button" class="btn btn-primary" id="closeOrderModalFooter" onclick="document.getElementById('orderModal').classList.remove('open');document.body.classList.remove('no-scroll')">סגירה</button></div></div></div>
 </div>
 <div class="modal-backdrop" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal">
@@ -293,10 +306,10 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx</pre>
   const STORAGE_KEY = 'wcProductManager.settings.v1';
   const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
   const $ = (id) => document.getElementById(id);
-  const state = { settings: loadSettings(), products: [], categories: [], categoriesLoaded: false, orders: [], ordersLoaded: false, orderLoading: false, orderSaving: false, analytics: null, analyticsLoaded: false, analyticsLoading: false, homeSummary: null, homeSummaryLoaded: false, homeSummaryLoading: false, homeSummaryLastSyncAt: 0, currentView: 'dashboard', loading: false, syncing: false, categoryLoading: false, categorySaving: false, productSaving: false, editingProduct: null, selectedFile: null, objectUrl: null, clearImage: false, connected: false, authBlocked: false, lastAuthError: '', hasLoaded: false, lastSyncAt: 0, ordersLastSyncAt: 0, analyticsLastSyncAt: 0, autoSyncTimer: null, toastTimer: null, installPrompt: null, selectedOrder: null };
+  const state = { settings: loadSettings(), wooAuthResolved: null, products: [], categories: [], categoriesLoaded: false, orders: [], ordersRawCount: 0, ordersDuplicateCount: 0, ordersPage: 1, ordersHasMore: false, ordersLoadingMore: false, ordersLoaded: false, orderLoading: false, orderSaving: false, productNameCache: {}, analytics: null, analyticsLoaded: false, analyticsLoading: false, homeSummary: null, homeSummaryLoaded: false, homeSummaryLoading: false, homeSummaryLastSyncAt: 0, currentView: 'dashboard', loading: false, syncing: false, categoryLoading: false, categorySaving: false, productSaving: false, editingProduct: null, selectedFile: null, objectUrl: null, clearImage: false, connected: false, authBlocked: false, lastAuthError: '', hasLoaded: false, lastSyncAt: 0, ordersLastSyncAt: 0, analyticsLastSyncAt: 0, autoSyncTimer: null, toastTimer: null, installPrompt: null, selectedOrder: null };
 
   function loadSettings() {
-    const empty = { storeUrl: '', consumerKey: '', consumerSecret: '', wpUsername: '', wpAppPassword: '' };
+    const empty = { storeUrl: '', consumerKey: '', consumerSecret: '', wpUsername: '', wpAppPassword: '', wooAuthMode: 'auto' };
     try {
       const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return empty;
       const parsed = JSON.parse(raw); if (!parsed || typeof parsed !== 'object') return empty;
@@ -305,12 +318,13 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx</pre>
         consumerKey: String(parsed.consumerKey ?? parsed.consumer_key ?? parsed.woocommerce_consumer_key ?? ''),
         consumerSecret: String(parsed.consumerSecret ?? parsed.consumer_secret ?? parsed.woocommerce_consumer_secret ?? ''),
         wpUsername: String(parsed.wpUsername ?? parsed.wp_username ?? parsed.wordpress_username ?? parsed.wordpressUser ?? ''),
-        wpAppPassword: String(parsed.wpAppPassword ?? parsed.wp_app_password ?? parsed.wp_application_password ?? parsed.wordpress_application_password ?? parsed.wordpress_app_password ?? parsed.wordpress_password ?? parsed.wpPassword ?? parsed.wp_password ?? '')
+        wpAppPassword: String(parsed.wpAppPassword ?? parsed.wp_app_password ?? parsed.wp_application_password ?? parsed.wordpress_application_password ?? parsed.wordpress_app_password ?? parsed.wordpress_password ?? parsed.wpPassword ?? parsed.wp_password ?? ''),
+        wooAuthMode: ['header','query','auto'].includes(String(parsed.wooAuthMode ?? parsed.woo_auth_mode ?? 'auto').toLowerCase()) ? String(parsed.wooAuthMode ?? parsed.woo_auth_mode ?? 'auto').toLowerCase() : 'auto'
       };
     } catch { return empty; }
   }
   function saveLocalSettings(settings) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(settings)); state.settings = settings; state.connected = false; state.authBlocked = false; state.lastAuthError = ''; return true; }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(settings)); state.settings = settings; state.wooAuthResolved = null; state.connected = false; state.authBlocked = false; state.lastAuthError = ''; return true; }
     catch (e) { showToast('לא ניתן לשמור בדפדפן. בדוק שהאחסון המקומי לא חסום.', 'error'); return false; }
   }
   function hasWooSettings(s = state.settings) { return !!(s.storeUrl && s.consumerKey && s.consumerSecret); }
@@ -367,17 +381,59 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx</pre>
     setConnectionPill(false, 'נדרש תיקון הרשאות');
     const status = $('settingsStatus'); if (status) status.textContent = 'הסנכרון האוטומטי הושהה לאחר שגיאת הרשאה: ' + state.lastAuthError + ' לחץ על ״בדיקת חיבור״ לאחר תיקון המפתחות.';
   }
-  async function wooRequest(path, options = {}) {
-    if (!hasWooSettings()) throw new Error('קודם יש להזין ולשמור את פרטי החיבור בהגדרות.');
+  function wooQueryAuthUrl(url, settings = state.settings) {
+    const parsed = new URL(url);
+    parsed.searchParams.set('consumer_key', String(settings.consumerKey || '').trim());
+    parsed.searchParams.set('consumer_secret', String(settings.consumerSecret || '').trim());
+    return parsed.href;
+  }
+  async function wooFetch(path, options, method) {
+    const url = getWooBase() + path;
     const headers = new Headers(options.headers || {});
-    headers.set('Authorization', wooAuth());
     headers.set('Accept', 'application/json');
     if (options.body && !(options.body instanceof FormData) && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
+    const useQuery = method === 'query';
+    if (useQuery) headers.delete('Authorization'); else headers.set('Authorization', wooAuth());
+    const target = useQuery ? wooQueryAuthUrl(url) : url;
+    return fetch(target, { ...options, headers, mode: 'cors', credentials: 'omit', cache: 'no-store' });
+  }
+  async function wooRequest(path, options = {}) {
+    if (!hasWooSettings()) throw new Error('יש להזין ולשמור את פרטי החיבור בהגדרות.');
+    const requestMethod = String(options.method || 'GET').toUpperCase();
+    const requestedMode = ['header','query','auto'].includes(state.settings.wooAuthMode) ? state.settings.wooAuthMode : 'auto';
+    // Once auto mode finds a working method, reuse it for this session. No repeated auth probes.
+    const resolvedMode = requestedMode === 'auto' ? (state.wooAuthResolved || 'header') : requestedMode;
     let response;
-    try { response = await fetch(getWooBase() + path, { ...options, headers, mode: 'cors', credentials: 'omit', cache: 'no-store' }); }
-    catch (err) { throw new Error('לא ניתן להגיע לשרת החנות. בדוק כתובת, אינטרנט ו־CORS. אם השרת אינו מעביר Authorization, יש להגדיר העברת כותרת זו בשרת. (' + (err && err.message ? err.message : 'שגיאת רשת') + ')'); }
-    try { return await parseResponse(response, 'woocommerce'); }
-    catch (err) { markWooAuthBlocked(err); throw err; }
+    let fallbackAttempted = false;
+    try {
+      response = await wooFetch(path, options, resolvedMode);
+      // WooCommerce documents query-string auth for servers that fail to pass Authorization headers.
+      // Retry only safe read requests, once, and only when auto mode receives HTTP 401.
+      if (requestedMode === 'auto' && !state.wooAuthResolved && resolvedMode === 'header' && response.status === 401 && ['GET','HEAD'].includes(requestMethod)) {
+        fallbackAttempted = true;
+        const queryResponse = await wooFetch(path, options, 'query');
+        if (queryResponse.ok) {
+          state.wooAuthResolved = 'query';
+          response = queryResponse;
+          const statusEl = $('settingsStatus');
+          if (statusEl) statusEl.textContent = 'החיבור אומת באמצעות Query String. השרת כנראה אינו מעביר כראוי את כותרת Authorization. אפשר לשנות את שיטת האימות בהגדרות.';
+        } else {
+          response = queryResponse;
+        }
+      }
+    } catch (err) {
+      throw new Error('לא ניתן להגיע לשרת החנות. בדוק כתובת, אינטרנט ו־CORS. (' + (err && err.message ? err.message : 'שגיאת רשת') + ')');
+    }
+    try {
+      return await parseResponse(response, 'woocommerce');
+    } catch (err) {
+      if (fallbackAttempted) {
+        err.authFallbackAttempted = true;
+        err.message = 'אימות WooCommerce נכשל גם בכותרת Authorization וגם בניסיון החלופי דרך Query String. מאחר ששני מסלולי האימות נדחו, ייתכן שהשרת/תוסף אבטחה חוסם את REST API או שהמפתח אינו מורשה לנקודת הקצה. פרטי המפתח לא נחשפו בהודעה זו.';
+      }
+      markWooAuthBlocked(err);
+      throw err;
+    }
   }
   async function wpRequest(path, options = {}, settings = state.settings) {
     if (!settings.wpUsername || !settings.wpAppPassword) throw new Error('יש להזין שם משתמש וסיסמת יישום WordPress.');
@@ -441,13 +497,14 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx</pre>
     $('consumerSecret').value = state.settings.consumerSecret;
     $('wpUsername').value = state.settings.wpUsername;
     $('wpAppPassword').value = state.settings.wpAppPassword;
+    $('wooAuthMode').value = state.settings.wooAuthMode || 'auto';
   }
   function readSettingsForm() {
     const storeUrl = normalizeStoreUrl($('storeUrl').value);
     const consumerKey = $('consumerKey').value.trim();
     const consumerSecret = $('consumerSecret').value.trim();
     if (!consumerKey || !consumerSecret) throw new Error('יש להזין גם Consumer Key וגם Consumer Secret.');
-    return { storeUrl, consumerKey, consumerSecret, wpUsername: $('wpUsername').value.trim(), wpAppPassword: $('wpAppPassword').value.trim() };
+    return { storeUrl, consumerKey, consumerSecret, wpUsername: $('wpUsername').value.trim(), wpAppPassword: $('wpAppPassword').value.trim(), wooAuthMode: $('wooAuthMode').value || 'auto' };
   }
   function showView(view) {
     const allowed = ['dashboard', 'analytics', 'orders', 'products', 'categories', 'settings', 'help'];
@@ -476,10 +533,11 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx</pre>
     } else {
       const sales = summary.sales || {};
       const gross = Number(sales.total_sales || 0);
+      const net = Number(sales.net_sales || gross);
       const orders = Number(sales.total_orders || 0);
-      set('homeSales7', summary.salesAvailable ? formatILS(gross) : 'לא זמין');
+      set('homeSales7', summary.salesAvailable ? formatILS(net) : 'לא זמין');
       set('homeOrders7', summary.salesAvailable ? orders.toLocaleString('he-IL') : 'לא זמין');
-      set('homeAverage7', summary.salesAvailable ? formatILS(orders ? gross / orders : 0) : 'לא זמין');
+      set('homeAverage7', summary.salesAvailable ? formatILS(orders ? net / orders : 0) : 'לא זמין');
       const totals = Array.isArray(summary.orderTotals) ? summary.orderTotals : [];
       const open = totals.filter(x => ['pending','processing','on-hold'].includes(x.slug)).reduce((n,x) => n + Number(x.total || 0), 0);
       set('homeOpenOrders', summary.statusAvailable ? open.toLocaleString('he-IL') : '—');
@@ -499,7 +557,7 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx</pre>
           const primary = document.createElement('div'); primary.className = 'home-order-primary';
           const name = document.createElement('b'); name.textContent = '#' + (order.number || order.id) + ' · ' + orderCustomerName(order);
           const date = document.createElement('small'); date.textContent = formatDate(order.date_created); primary.append(name,date);
-          const meta = document.createElement('div'); meta.className = 'home-order-meta'; meta.textContent = (order.line_items || []).reduce((n,x)=>n+Number(x.quantity||0),0).toLocaleString('he-IL') + ' פריטים';
+          const meta = document.createElement('div'); meta.className = 'home-order-meta'; const purchasedNames = (order.line_items || []).map(orderLineItemName); meta.textContent = (order.line_items || []).reduce((n,x)=>n+Number(x.quantity||0),0).toLocaleString('he-IL') + ' פריטים · ' + (purchasedNames.slice(0,2).join(', ') || 'אין פירוט מוצרים') + (purchasedNames.length > 2 ? ' ועוד ' + (purchasedNames.length - 2) : '');
           const status = document.createElement('span'); status.className = 'home-status ' + String(order.status || ''); status.textContent = ORDER_STATUS_LABELS[order.status] || order.status || '—';
           const total = document.createElement('span'); total.className = 'home-order-total'; total.textContent = formatILS(order.total || 0);
           row.append(primary,meta,status,total); row.tabIndex = 0; row.setAttribute('role','button'); row.setAttribute('aria-label','פתיחת הזמנה מספר ' + (order.number || order.id));
@@ -520,9 +578,14 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx</pre>
     const dateMin = localDateString(start), dateMax = localDateString(end);
     const summary = { sales: null, salesAvailable: false, orderTotals: [], statusAvailable: false, errors: [] };
     try {
-      const sales = await wooRequest('/reports/sales?date_min=' + encodeURIComponent(dateMin) + '&date_max=' + encodeURIComponent(dateMax), { method: 'GET' });
-      if (Array.isArray(sales) && sales[0]) { summary.sales = sales[0]; summary.salesAvailable = true; }
-    } catch (err) { summary.errors.push(err.message || 'דוח מכירות אינו זמין'); if (state.authBlocked) { state.homeSummary = summary; state.homeSummaryLoading = false; state.homeSummaryLoaded = true; renderHomeSummary(); return false; } }
+      const paidResult = await fetchOrdersByStatuses(dateMin, dateMax);
+      const calculated = calculatePaidOrderStats(paidResult.orders);
+      summary.sales = calculated.sales; summary.salesAvailable = true;
+      if (paidResult.truncated) summary.errors.push('סיכום 7 הימים עשוי להיות חלקי: הגעת למגבלת 20 עמודים לאחד הסטטוסים.');
+    } catch (err) {
+      summary.errors.push(err.message || 'טעינת הזמנות ששולמו נכשלה');
+      if (state.authBlocked) { state.homeSummary = summary; state.homeSummaryLoading = false; state.homeSummaryLoaded = true; renderHomeSummary(); return false; }
+    }
     try {
       const totals = await wooRequest('/reports/orders/totals', { method: 'GET' });
       if (Array.isArray(totals)) { summary.orderTotals = totals; summary.statusAvailable = true; }
@@ -778,9 +841,9 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
     }
     $('testConnection').disabled = true; $('saveSettings').disabled = true; $('testConnection').textContent = 'בודק…'; $('saveSettings').textContent = 'מתחבר…'; $('settingsStatus').textContent = 'בודק גישה ל־WooCommerce…';
     try {
-      state.authBlocked = false; state.lastAuthError = '';
+      state.authBlocked = false; state.lastAuthError = ''; state.wooAuthResolved = null;
       await wooRequest('/products?per_page=1', { method: 'GET' });
-      state.connected = true; state.authBlocked = false; setConnectionPill(true); $('settingsStatus').textContent = 'החיבור תקין. מפתח ה־API הצליח לגשת למוצרים.';
+      state.connected = true; state.authBlocked = false; setConnectionPill(true); $('settingsStatus').textContent = state.wooAuthResolved === 'query' ? 'החיבור תקין. השרת לא אימת דרך כותרת Authorization, ולכן נבחרה אוטומטית שיטת Query String.' : 'החיבור תקין. מפתח ה־API הצליח לגשת למוצרים דרך כותרת Authorization.';
       showToast('החיבור לחנות הצליח!', 'success');
       await refreshProducts(); if (!state.connected || state.authBlocked) return false; await refreshOrders({ silent: true }); if (!state.authBlocked) await refreshHomeSummary({ silent: true, skipOrders: true }); showView('dashboard'); return true;
     } catch (e) {
@@ -866,7 +929,8 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
       consumerKey: String($('consumerKey').value || '').trim(),
       consumerSecret: String($('consumerSecret').value || '').trim(),
       wpUsername: String($('wpUsername').value || '').trim(),
-      wpAppPassword: String($('wpAppPassword').value || '').trim()
+      wpAppPassword: String($('wpAppPassword').value || '').trim(),
+      wooAuthMode: String($('wooAuthMode').value || 'auto')
     };
   }
   function normalizeSettingKey(key) { return String(key || '').replace(/^\uFEFF/, '').toLowerCase().replace(/[^a-z0-9א-ת]/g, ''); }
@@ -879,6 +943,7 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
     add('consumerKey', ['consumerKey','consumer_key','ck','woocommerce_key','woocommerce_consumer_key','woocommerceConsumerKey','wc_consumer_key','CONSUMER KEY','WooCommerce Key','מפתח צרכן','מפתח WooCommerce']);
     add('consumerSecret', ['consumerSecret','consumer_secret','cs','woocommerce_secret','woocommerce_consumer_secret','woocommerceConsumerSecret','wc_consumer_secret','CONSUMER SECRET','WooCommerce Secret','סוד צרכן','סוד WooCommerce']);
     add('wpUsername', ['wpUsername','wp_username','wordpressUsername','wordpress_username','wordpressUser','wordpress_user','wp_user','wpUser','wp_login','wordpress_login','wordpress_user_login','username','user','login','שם משתמש WordPress','משתמש WordPress']);
+    add('wooAuthMode', ['wooAuthMode','woo_auth_mode','woocommerceAuthMode','woocommerce_auth_mode','authMode','auth_mode','queryStringAuth','query_string_auth']);
     add('wpAppPassword', ['wpAppPassword','wp_app_password','wpApplicationPassword','wp_application_password','wordpressAppPassword','wordpress_app_password','wordpressApplicationPassword','wordpress_application_password','wordpress_password','wordpressPassword','wpPassword','wp_password','wp_application_pass','wordpress_app_pass','wp_app_pass','wordpress_pass','applicationPassword','application_password','appPassword','app_password','app_pass','applicationPass','סיסמת יישום','סיסמת יישום WordPress','סיסמת אפליקציה','סיסמת אפליקציה WordPress']);
     const values = {}; const present = new Set();
     const assign = (dest, value) => { if (value === undefined || value === null) return; const v = String(value).trim(); if (!v) return; values[dest] = v; present.add(dest); };
@@ -901,7 +966,7 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
             if (['username','user','login','userlogin'].includes(normalized)) dest = 'wpUsername';
             if (['password','apppassword','applicationpassword','applicationpass'].includes(normalized)) dest = 'wpAppPassword';
           }
-          if (dest && (typeof value === 'string' || typeof value === 'number')) assign(dest, value);
+          if (dest && (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean')) assign(dest, value);
           else if (value && typeof value === 'object') walk(value, path);
         }
       };
@@ -935,11 +1000,15 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
     if (!present.size) throw new Error('לא זוהו פרטי חיבור. השתמש בשמות כמו STORE_URL, CONSUMER_KEY, CONSUMER_SECRET, WP_USERNAME ו־WP_APP_PASSWORD.');
     const result = { ...baseSettings };
     for (const key of present) result[key] = values[key];
+    if (present.has('wooAuthMode')) {
+      const rawMode = String(result.wooAuthMode).toLowerCase().trim();
+      result.wooAuthMode = ['query','query_string','querystring','true','1','yes'].includes(rawMode) ? 'query' : ['header','basic','authorization'].includes(rawMode) ? 'header' : 'auto';
+    }
     if (result.storeUrl) result.storeUrl = normalizeStoreUrl(result.storeUrl);
     return { settings: result, present: [...present] };
   }
   function settingsAsText(s) {
-    return ['# WooCommerce Manager Settings', `STORE_URL=${s.storeUrl || ''}`, `CONSUMER_KEY=${s.consumerKey || ''}`, `CONSUMER_SECRET=${s.consumerSecret || ''}`, `WP_USERNAME=${s.wpUsername || ''}`, `WP_APP_PASSWORD=${s.wpAppPassword || ''}`].join('\n');
+    return ['# WooCommerce Manager Settings', `STORE_URL=${s.storeUrl || ''}`, `CONSUMER_KEY=${s.consumerKey || ''}`, `CONSUMER_SECRET=${s.consumerSecret || ''}`, `WP_USERNAME=${s.wpUsername || ''}`, `WP_APP_PASSWORD=${s.wpAppPassword || ''}`, `WOO_AUTH_MODE=${s.wooAuthMode || 'auto'}`].join('\n');
   }
   function transferSettings(format) {
     const s = currentSettingsFromFields();
@@ -961,7 +1030,7 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
         renderProducts(); renderCategories(); renderOrders(); renderAnalytics(); renderHomeSummary();
       }
       fillSettingsForm(); setConnectionPill(false, 'נדרשת בדיקה');
-      const labels = {storeUrl:'כתובת חנות',consumerKey:'Consumer Key',consumerSecret:'Consumer Secret',wpUsername:'שם משתמש WordPress',wpAppPassword:'סיסמת יישום WordPress'};
+      const labels = {storeUrl:'כתובת חנות',consumerKey:'Consumer Key',consumerSecret:'Consumer Secret',wpUsername:'שם משתמש WordPress',wpAppPassword:'סיסמת יישום WordPress',wooAuthMode:'שיטת אימות WooCommerce'};
       $('settingsTransferStatus').textContent = 'זוהו ונשמרו: ' + parsed.present.map(k => labels[k]).join(', ') + '. השדות שלא הופיעו נשמרו ללא שינוי.';
       $('settingsStatus').textContent = 'ההגדרות נשמרו בדפדפן.'; showToast('ההגדרות נשמרו. זוהו ' + parsed.present.length + ' שדות.', 'success');
       if ($('autoConnectAfterImport').checked && hasWooSettings(imported)) {
@@ -1006,6 +1075,103 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
     const end = new Date(); const start = new Date(end); start.setDate(start.getDate() - (days - 1));
     return { days, dateMin: localDateString(start), dateMax: localDateString(end) };
   }
+  const PAID_ORDER_STATUSES = new Set(['processing', 'completed']);
+  function dedupeOrders(orders) {
+    const byId = new Map();
+    for (const order of Array.isArray(orders) ? orders : []) {
+      const key = order && order.id != null ? String(order.id) : 'missing:' + String(order?.number || '') + ':' + String(order?.date_created || '');
+      if (!byId.has(key)) byId.set(key, order);
+      else {
+        const previous = byId.get(key);
+        const prevUpdated = Date.parse(previous?.date_modified || previous?.date_created || '') || 0;
+        const nextUpdated = Date.parse(order?.date_modified || order?.date_created || '') || 0;
+        if (nextUpdated >= prevUpdated) byId.set(key, order);
+      }
+    }
+    return [...byId.values()].sort((a,b) => (Date.parse(b.date_created || '') || 0) - (Date.parse(a.date_created || '') || 0));
+  }
+  function isPlaceholderProductName(value) {
+    const name = String(value || '').trim();
+    return !name || /^(?:מוצר\s*)?#?\d+$/i.test(name) || /^product\s*#?\d+$/i.test(name);
+  }
+  function orderLineItemName(item) {
+    const raw = String(item?.name || '').trim();
+    if (!isPlaceholderProductName(raw)) return raw;
+    const id = String(item?.product_id || '');
+    const cached = state.productNameCache[id] || state.products.find(p => Number(p.id) === Number(id))?.name;
+    if (cached) return cached;
+    if (item?.sku) return 'מוצר לפי מק״ט ' + String(item.sku);
+    return 'שם המוצר לא התקבל מ־WooCommerce';
+  }
+  async function hydrateProductNamesForOrders(orders) {
+    const missing = new Set();
+    for (const order of orders || []) for (const item of order.line_items || []) {
+      const id = Number(item.product_id);
+      if (id && isPlaceholderProductName(item.name) && !state.productNameCache[String(id)] && !state.products.some(p => Number(p.id) === id)) missing.add(id);
+    }
+    if (!missing.size || state.authBlocked) return;
+    try {
+      const ids = [...missing].slice(0,100);
+      const products = await wooRequest('/products?include=' + encodeURIComponent(ids.join(',')) + '&per_page=100', { method: 'GET' });
+      if (Array.isArray(products)) products.forEach(product => { if (product?.id && product?.name) state.productNameCache[String(product.id)] = String(product.name); });
+    } catch (err) {
+      // Product name enrichment is best-effort; the purchase data itself remains usable.
+    }
+    if (state.ordersLoaded) renderOrders();
+  }
+  async function fetchOrdersByStatuses(dateMin, dateMax, statuses = ['processing','completed']) {
+    const collected = []; let truncated = false;
+    const after = dateMin + 'T00:00:00';
+    const before = dateMax + 'T23:59:59';
+    for (const status of statuses) {
+      for (let page = 1; page <= 20; page++) {
+        const query = new URLSearchParams({ after, before, status, per_page: '100', page: String(page), orderby: 'date', order: 'desc' });
+        const batch = await wooRequest('/orders?' + query.toString(), { method: 'GET' });
+        if (!Array.isArray(batch)) throw new Error('WooCommerce החזיר רשימת הזמנות לא תקינה לסטטוס ' + status + '.');
+        collected.push(...batch);
+        if (batch.length < 100) break;
+        if (page === 20) truncated = true;
+      }
+    }
+    const unique = dedupeOrders(collected).filter(order => PAID_ORDER_STATUSES.has(String(order.status || '')));
+    await hydrateProductNamesForOrders(unique);
+    return { orders: unique, truncated, rawCount: collected.length };
+  }
+  function calculatePaidOrderStats(orders) {
+    const paid = dedupeOrders(orders).filter(order => {
+      if (!PAID_ORDER_STATUSES.has(String(order.status || ''))) return false;
+      const total = Number(order.total || 0), refunded = Number(order.total_refunded || 0);
+      return !(total > 0 && refunded >= total);
+    });
+    let gross = 0, refunds = 0, itemsSold = 0;
+    const customers = new Set(), sellers = new Map(), daily = {};
+    for (const order of paid) {
+      const total = Number(order.total || 0); const refunded = Number(order.total_refunded || 0);
+      gross += Number.isFinite(total) ? total : 0;
+      refunds += Number.isFinite(refunded) ? refunded : 0;
+      const date = String(order.date_created || '').slice(0,10);
+      if (date) { if (!daily[date]) daily[date] = { sales: 0 }; daily[date].sales += Math.max(0, total - refunded); }
+      const email = String(order.billing?.email || '').trim().toLowerCase();
+      const customer = order.customer_id ? 'id:' + order.customer_id : email ? 'email:' + email : 'guest-order:' + order.id;
+      customers.add(customer);
+      for (const item of order.line_items || []) {
+        const quantity = Number(item.quantity || 0); itemsSold += Number.isFinite(quantity) ? quantity : 0;
+        const name = orderLineItemName(item);
+        const key = item.product_id ? 'product:' + item.product_id : 'name:' + name;
+        const current = sellers.get(key) || { title: name, quantity: 0, product_id: item.product_id || null, sku: item.sku || '' };
+        current.quantity += Number.isFinite(quantity) ? quantity : 0;
+        if (isPlaceholderProductName(current.title) && !isPlaceholderProductName(name)) current.title = name;
+        sellers.set(key, current);
+      }
+    }
+    const net = Math.max(0, gross - refunds);
+    const totalItems = [...sellers.values()].reduce((sum,item)=>sum+item.quantity,0);
+    return {
+      sales: { total_sales: gross, net_sales: net, total_orders: paid.length, total_items: itemsSold || totalItems, totals: daily },
+      topSellers: [...sellers.values()].sort((a,b)=>b.quantity-a.quantity).slice(0,12),
+      payingCustomers: customers.size, orders: paid, gross, net, refunds, itemsSold: itemsSold || totalItems
+    };
+  }
   function renderAnalytics() {
     const a = state.analytics || {};
     const sales = a.sales || {};
@@ -1018,7 +1184,7 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
         set('grossSales', formatILS(gross)); set('netSales', formatILS(net)); set('periodOrders', orders.toLocaleString('he-IL'));
         set('averageOrder', formatILS(orders ? net / orders : 0)); set('itemsSold', items.toLocaleString('he-IL'));
       } else ['grossSales','netSales','periodOrders','averageOrder','itemsSold'].forEach(id => set(id, 'לא זמין'));
-      const paying = (a.customers || []).find(x => x.slug === 'paying'); set('payingCustomers', paying ? Number(paying.total || 0).toLocaleString('he-IL') : '—');
+      const paying = (a.customers || []).find(x => x.slug === 'paying'); set('payingCustomers', a.payingCustomers != null ? Number(a.payingCustomers).toLocaleString('he-IL') : paying ? Number(paying.total || 0).toLocaleString('he-IL') : '—');
     }
     const chart = $('salesChart'); if (chart) {
       chart.replaceChildren(); const totals = sales.totals && typeof sales.totals === 'object' ? Object.entries(sales.totals) : [];
@@ -1036,7 +1202,7 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
     const sellers = $('topSellers'); if (sellers) {
       sellers.replaceChildren(); const rows = Array.isArray(a.topSellers) ? a.topSellers : [];
       if (!rows.length) { const d = document.createElement('div'); d.className = 'loading-panel'; d.textContent = state.analyticsLoading ? 'טוען…' : state.analyticsLoaded ? 'אין נתוני מוצרים נמכרים לתקופה.' : 'חבר את החנות כדי לטעון נתונים.'; sellers.appendChild(d); }
-      else rows.slice(0, 8).forEach(item => { const row = document.createElement('div'); row.className = 'seller-row'; const name = document.createElement('span'); name.className = 'seller-name'; name.textContent = item.title || ('מוצר #' + item.product_id); const qty = document.createElement('span'); qty.className = 'seller-qty'; qty.textContent = Number(item.quantity || 0).toLocaleString('he-IL') + ' נמכרו'; row.append(name, qty); sellers.appendChild(row); });
+      else rows.slice(0, 8).forEach(item => { const row = document.createElement('div'); row.className = 'seller-row'; const name = document.createElement('span'); name.className = 'seller-name'; name.textContent = isPlaceholderProductName(item.title) ? 'שם המוצר לא זמין' : item.title; const qty = document.createElement('span'); qty.className = 'seller-qty'; qty.textContent = Number(item.quantity || 0).toLocaleString('he-IL') + ' נמכרו'; row.append(name, qty); sellers.appendChild(row); });
     }
     const statuses = $('orderStatusSummary'); if (statuses) {
       statuses.replaceChildren(); const rows = Array.isArray(a.orderTotals) ? a.orderTotals : [];
@@ -1053,30 +1219,26 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
     if (!hasWooSettings() || !state.connected || state.authBlocked) { if (!silent) showToast('בדוק תחילה חיבור WooCommerce בהגדרות.', 'error'); return false; }
     if (state.analyticsLoading) return false;
     const { dateMin, dateMax } = periodRange(); state.analyticsLoading = true; renderAnalytics();
-    const report = async path => {
-      try { return await wooRequest(path, { method: 'GET' }); }
-      catch (err) { if (state.authBlocked) throw err; return { __error: err.message || 'דוח לא זמין' }; }
-    };
+    const errors = [];
     try {
-      const salesR = await report('/reports/sales?date_min=' + encodeURIComponent(dateMin) + '&date_max=' + encodeURIComponent(dateMax));
+      // Revenue KPIs and best sellers are computed from paid orders only, not the generic sales report.
+      // This explicitly excludes pending, on-hold, cancelled, failed and refunded orders.
+      const paidResult = await fetchOrdersByStatuses(dateMin, dateMax);
       if (state.authBlocked) throw new Error('הסנכרון הופסק עקב שגיאת הרשאה.');
-      const ordersR = await report('/reports/orders/totals');
-      if (state.authBlocked) throw new Error('הסנכרון הופסק עקב שגיאת הרשאה.');
-      const sellersR = await report('/reports/top_sellers?date_min=' + encodeURIComponent(dateMin) + '&date_max=' + encodeURIComponent(dateMax));
-      if (state.authBlocked) throw new Error('הסנכרון הופסק עקב שגיאת הרשאה.');
-      const customersR = await report('/reports/customers/totals');
-      const salesValue = Array.isArray(salesR) ? salesR : null;
+      const calculated = calculatePaidOrderStats(paidResult.orders);
+      let orderTotals = [];
+      try { const result = await wooRequest('/reports/orders/totals', { method: 'GET' }); if (Array.isArray(result)) orderTotals = result; else errors.push('סיכום סטטוסים לא זמין'); }
+      catch (err) { errors.push(err.message || 'סיכום סטטוסים לא זמין'); if (state.authBlocked) throw err; }
       state.analytics = {
-        sales: salesValue ? (salesValue[0] || {}) : {}, salesAvailable: !!salesValue,
-        orderTotals: Array.isArray(ordersR) ? ordersR : [], topSellers: Array.isArray(sellersR) ? sellersR : [],
-        customers: Array.isArray(customersR) ? customersR : [],
-        errors: [salesR,ordersR,sellersR,customersR].filter(x => x && x.__error).map(x => x.__error)
+        sales: calculated.sales, salesAvailable: true,
+        orderTotals, topSellers: calculated.topSellers,
+        customers: [{ slug: 'paying', total: calculated.payingCustomers }], payingCustomers: calculated.payingCustomers,
+        paidOrderCount: calculated.orders.length, truncated: paidResult.truncated,
+        errors: [...errors, ...(paidResult.truncated ? ['הגעת למגבלת 20 עמודים לסטטוס; ייתכן שסיכום התקופה חלקי.'] : [])]
       };
-      state.analyticsLoaded = !!(salesValue || Array.isArray(ordersR) || Array.isArray(sellersR) || Array.isArray(customersR));
-      state.analyticsLastSyncAt = Date.now(); renderAnalytics(); renderHomeSummary();
-      if (!state.analyticsLoaded && !silent) showToast('טעינת נתוני המכירות נכשלה.', 'error');
-      else if (state.analytics.errors.length && !silent) showToast('חלק מהדוחות לא היו זמינים: ' + state.analytics.errors[0], '');
-      return state.analyticsLoaded;
+      state.analyticsLoaded = true; state.analyticsLastSyncAt = Date.now(); renderAnalytics(); renderHomeSummary();
+      if (state.analytics.errors.length && !silent) showToast('הנתונים נטענו, אך יש מגבלה: ' + state.analytics.errors[0], '');
+      return true;
     } catch (err) {
       if (!silent) showToast(err.message || 'טעינת הסטטיסטיקות נכשלה.', 'error');
       return false;
@@ -1091,19 +1253,22 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
     const query = String($('orderSearch')?.value || '').trim().toLocaleLowerCase('he');
     const status = $('orderStatusFilter')?.value || 'any';
     const filtered = state.orders.filter(o => {
-      const hay = [o.number, o.id, orderCustomerName(o), o.billing?.email, o.billing?.phone].join(' ').toLocaleLowerCase('he');
+      const productNames = (o.line_items || []).map(orderLineItemName).join(' ');
+      const hay = [o.number, o.id, orderCustomerName(o), o.billing?.email, o.billing?.phone, productNames].join(' ').toLocaleLowerCase('he');
       return (!query || hay.includes(query)) && (status === 'any' || o.status === status);
     });
-    $('ordersCount').textContent = state.ordersLoaded ? `מוצגות ${filtered.length.toLocaleString('he-IL')} מתוך ${state.orders.length.toLocaleString('he-IL')} ההזמנות שנטענו` : 'התחבר כדי לטעון הזמנות';
+    $('ordersCount').textContent = state.ordersLoaded ? `מוצגות ${filtered.length.toLocaleString('he-IL')} מתוך ${state.orders.length.toLocaleString('he-IL')} הזמנות ייחודיות שנטענו` + (state.ordersDuplicateCount ? ` · הוסרו ${state.ordersDuplicateCount} רשומות כפולות לפי מזהה הזמנה` : '') : 'התחבר כדי לטעון הזמנות';
+    const loadMoreButton = $('loadMoreOrders'); if (loadMoreButton) { loadMoreButton.disabled = !state.ordersLoaded || !state.ordersHasMore || state.ordersLoadingMore || state.orderLoading || !state.connected; loadMoreButton.classList.toggle('hidden', !state.ordersLoaded || (!state.ordersHasMore && !state.ordersLoadingMore)); loadMoreButton.innerHTML = state.ordersLoadingMore ? '<span class="spinner"></span> טוען…' : iconHtml('chevrons-down',16) + ' טען עוד הזמנות'; }
     if (state.orderLoading) { wrap.innerHTML = '<div class="loading-panel"><span class="spinner"></span>טוען הזמנות…</div>'; return; }
     if (!state.ordersLoaded) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">' + iconHtml('receipt',38) + '</div><h3>ההזמנות עדיין לא נטענו</h3><p>התחבר לחנות כדי לראות נתוני קנייה.</p></div>'; return; }
     if (!filtered.length) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">' + iconHtml('search',38) + '</div><h3>לא נמצאו הזמנות</h3><p>נסה לשנות את החיפוש או את הסינון.</p></div>'; return; }
     const rows = filtered.map(o => {
       const name = orderCustomerName(o); const email = o.billing?.email || ''; const itemCount = (o.line_items || []).reduce((n, x) => n + Number(x.quantity || 0), 0);
-      return `<tr><td><span class="order-number">#${escapeHtml(o.number || o.id)}</span><div class="order-sub">${escapeHtml(formatDate(o.date_created))}</div></td><td><div class="order-customer">${escapeHtml(name)}</div><div class="order-sub">${escapeHtml(email)}</div></td><td>${itemCount.toLocaleString('he-IL')} פריטים<div class="order-sub">${(o.line_items || []).length} מוצרים שונים</div></td><td><span class="status-chip">${escapeHtml(ORDER_STATUS_LABELS[o.status] || o.status || '—')}</span></td><td class="order-total">${formatILS(o.total || 0)}</td><td><select class="order-status-select" data-order-status="${Number(o.id)}" aria-label="סטטוס להזמנה ${escapeHtml(o.number || o.id)}">${orderStatusOptions(o.status)}</select></td><td class="order-actions-cell"><button class="btn btn-secondary btn-sm" data-order-details="${Number(o.id)}">פרטים</button> <button class="btn btn-primary btn-sm" data-order-save="${Number(o.id)}">עדכון</button></td></tr>`;
+      const lineNames = (o.line_items || []).map(orderLineItemName); const shownNames = lineNames.slice(0,2).map(escapeHtml).join(', '); const moreNames = lineNames.length > 2 ? ` ועוד ${lineNames.length - 2}` : '';
+      return `<tr><td><span class="order-number">#${escapeHtml(o.number || o.id)}</span><div class="order-sub">${escapeHtml(formatDate(o.date_created))}</div></td><td><div class="order-customer">${escapeHtml(name)}</div><div class="order-sub">${escapeHtml(email)}</div></td><td><b>${itemCount.toLocaleString('he-IL')} פריטים</b><div class="order-sub order-products-summary">${shownNames || 'אין פירוט מוצרים'}${moreNames}</div></td><td><span class="status-chip">${escapeHtml(ORDER_STATUS_LABELS[o.status] || o.status || '—')}</span></td><td class="order-total">${formatILS(o.total || 0)}</td><td><select class="order-status-select" data-order-status="${Number(o.id)}" aria-label="סטטוס להזמנה ${escapeHtml(o.number || o.id)}">${orderStatusOptions(o.status)}</select></td><td class="order-actions-cell"><button class="btn btn-secondary btn-sm" data-order-details="${Number(o.id)}">פרטים</button> <button class="btn btn-primary btn-sm" data-order-save="${Number(o.id)}">עדכון</button> <button class="btn btn-danger btn-sm" data-order-delete="${Number(o.id)}" title="מחיקה לצמיתות">מחיקה</button></td></tr>`;
     }).join('');
     wrap.innerHTML = `<div class="orders-table-wrap"><table class="orders-table"><thead><tr><th>הזמנה</th><th>לקוח</th><th>פריטים</th><th>סטטוס נוכחי</th><th>סכום</th><th>שינוי סטטוס</th><th>פעולות</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-    $('ordersSyncLabel').textContent = state.ordersLastSyncAt ? 'עודכן: ' + new Date(state.ordersLastSyncAt).toLocaleString('he-IL') + ' · מוצגות עד 50 הזמנות אחרונות' : 'ההזמנות נטענו.';
+    $('ordersSyncLabel').textContent = state.ordersLastSyncAt ? 'עודכן: ' + new Date(state.ordersLastSyncAt).toLocaleString('he-IL') + ' · אפשר לטעון 50 הזמנות נוספות בכל לחיצה' : 'ההזמנות נטענו.';
   }
   async function refreshOrders(options = {}) {
     const { silent = false } = options;
@@ -1114,29 +1279,76 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
       const path = '/orders?per_page=50&page=1&orderby=date&order=desc';
       const data = await wooRequest(path, { method: 'GET' });
       if (!Array.isArray(data)) throw new Error('השרת החזיר תשובה לא תקינה ברשימת ההזמנות.');
-      state.orders = data; state.ordersLoaded = true; state.ordersLastSyncAt = Date.now(); renderOrders(); renderHomeSummary(); return true;
+      state.ordersRawCount = data.length; state.orders = dedupeOrders(data); state.ordersDuplicateCount = Math.max(0, state.ordersRawCount - state.orders.length); state.ordersPage = 1; state.ordersHasMore = data.length === 50; state.ordersLoaded = true; state.ordersLastSyncAt = Date.now(); renderOrders(); renderHomeSummary(); return true;
     } catch (err) { if (!silent) showToast('טעינת ההזמנות נכשלה: ' + (err.message || 'שגיאת שרת'), 'error'); if (!state.ordersLoaded) { state.orders = []; renderOrders(); } return false; }
     finally { state.orderLoading = false; if ($('refreshOrders')) $('refreshOrders').disabled = false; renderOrders(); renderHomeSummary(); }
   }
-  async function saveOrderStatus(id) {
-    const order = state.orders.find(o => Number(o.id) === Number(id)); const select = document.querySelector(`[data-order-status="${Number(id)}"]`);
+  async function loadMoreOrders() {
+    if (!state.ordersLoaded || !state.ordersHasMore || state.ordersLoadingMore || !state.connected || state.authBlocked) return false;
+    state.ordersLoadingMore = true; renderOrders();
+    const nextPage = state.ordersPage + 1;
+    try {
+      const data = await wooRequest('/orders?per_page=50&page=' + nextPage + '&orderby=date&order=desc', { method: 'GET' });
+      if (!Array.isArray(data)) throw new Error('השרת החזיר תשובה לא תקינה בטעינת הזמנות נוספות.');
+      const previousUniqueCount = state.orders.length;
+      state.ordersRawCount += data.length;
+      state.orders = dedupeOrders(state.orders.concat(data));
+      const addedUniqueCount = state.orders.length - previousUniqueCount;
+      state.ordersDuplicateCount = Math.max(0, state.ordersRawCount - state.orders.length);
+      state.ordersPage = nextPage; state.ordersHasMore = data.length === 50 && addedUniqueCount > 0;
+      renderOrders(); renderHomeSummary();
+      if (!data.length) showToast('אין הזמנות נוספות לטעינה.', '');
+      else if (addedUniqueCount === 0) showToast('השרת החזיר עמוד ללא הזמנות חדשות. עצרתי את הטעינה כדי למנוע כפילויות.', '');
+      return true;
+    } catch (err) { showToast('טעינת הזמנות נוספות נכשלה: ' + (err.message || 'שגיאת שרת'), 'error'); return false; }
+    finally { state.ordersLoadingMore = false; renderOrders(); }
+  }
+  async function saveOrderStatus(id, explicitSelect = null) {
+    const order = state.orders.find(o => Number(o.id) === Number(id)); const select = explicitSelect || document.querySelector(`[data-order-status="${Number(id)}"]`);
     if (!order || !select) return; const next = select.value;
     if (next === order.status) { showToast('לא בוצע שינוי בסטטוס.', ''); return; }
     if (!confirm(`לעדכן את הזמנה #${order.number || order.id} לסטטוס "${ORDER_STATUS_LABELS[next] || next}"?`)) { select.value = order.status; return; }
     try {
       const saved = await wooRequest('/orders/' + encodeURIComponent(order.id), { method: 'PUT', body: JSON.stringify({ status: next }) });
       const index = state.orders.findIndex(o => Number(o.id) === Number(saved.id)); if (index >= 0) state.orders[index] = saved;
-      renderOrders(); renderHomeSummary(); showToast('סטטוס ההזמנה עודכן בחנות.', 'success'); if (state.currentView === 'analytics') refreshAnalytics({ silent: true });
+      renderOrders(); if (state.selectedOrder && Number(state.selectedOrder.id) === Number(saved.id)) openOrderDetails(saved); refreshHomeSummary({ silent: true }); showToast('סטטוס ההזמנה עודכן בחנות.', 'success'); if (state.analyticsLoaded) refreshAnalytics({ silent: true });
     } catch (err) { select.value = order.status; showToast('עדכון ההזמנה נכשל: ' + err.message, 'error'); }
   }
   function openOrderDetails(order) {
     if (!order) return; state.selectedOrder = order;
     const billing = order.billing || {}, shipping = order.shipping || {};
     const address = x => [x.address_1, x.address_2, x.city, x.state, x.postcode, x.country].filter(Boolean).join(', ');
-    const lines = (order.line_items || []).map(item => `<tr><td>${escapeHtml(item.name || '')}</td><td>${Number(item.quantity || 0)}</td><td>${formatILS(item.total || 0)}</td></tr>`).join('');
+    const lines = (order.line_items || []).map(item => {
+      const name = orderLineItemName(item);
+      const meta = [item.sku ? 'מק״ט: ' + item.sku : '', item.variation_id ? 'וריאציה' : ''].filter(Boolean).join(' · ');
+      return `<tr><td><b>${escapeHtml(name)}</b>${meta ? `<div class="order-sub">${escapeHtml(meta)}</div>` : ''}</td><td>${Number(item.quantity || 0)}</td><td>${formatILS(item.total || 0)}</td></tr>`;
+    }).join('');
     const fees = (order.fee_lines || []).map(item => `<tr><td>${escapeHtml(item.name || 'עמלה')}</td><td>—</td><td>${formatILS(item.total || 0)}</td></tr>`).join('');
-    $('orderModalBody').innerHTML = `<div class="order-detail-grid"><div class="order-detail-box"><h4>פרטי לקוח</h4><p><b>${escapeHtml(orderCustomerName(order))}</b></p><p>${escapeHtml(billing.email || 'אין אימייל')}</p><p>${escapeHtml(billing.phone || 'אין טלפון')}</p><p>${escapeHtml(address(billing) || 'אין כתובת חיוב')}</p></div><div class="order-detail-box"><h4>משלוח ותשלום</h4><p>${escapeHtml(address(shipping) || 'אין כתובת משלוח')}</p><p>אמצעי תשלום: ${escapeHtml(order.payment_method_title || '—')}</p><p>משלוח: ${escapeHtml((order.shipping_lines || []).map(x => x.method_title).join(', ') || '—')}</p><p>הערת לקוח: ${escapeHtml(order.customer_note || '—')}</p></div></div><div class="order-detail-box"><h4>פריטים בהזמנה</h4><table class="order-lines"><thead><tr><th>מוצר</th><th>כמות</th><th>סכום</th></tr></thead><tbody>${lines || '<tr><td colspan="3">אין פריטים להצגה</td></tr>'}${fees}</tbody></table><div class="order-detail-total"><span>סכום ביניים</span><span>${formatILS(order.total || 0)}</span></div><div class="order-detail-total"><span>סטטוס</span><span>${escapeHtml(ORDER_STATUS_LABELS[order.status] || order.status)}</span></div><div class="order-sub">נוצרה: ${escapeHtml(formatDate(order.date_created))} · מספר מזהה: ${Number(order.id)}</div></div>`;
-    $('orderModalTitle').textContent = 'הזמנה #' + (order.number || order.id); $('orderModal').classList.add('open'); document.body.classList.add('no-scroll');
+    $('orderModalBody').innerHTML = `<div class="order-detail-grid"><div class="order-detail-box"><h4>פרטי לקוח</h4><p><b>${escapeHtml(orderCustomerName(order))}</b></p><p>${escapeHtml(billing.email || 'אין אימייל')}</p><p>${escapeHtml(billing.phone || 'אין טלפון')}</p><p>${escapeHtml(address(billing) || 'אין כתובת חיוב')}</p></div><div class="order-detail-box"><h4>משלוח ותשלום</h4><p>${escapeHtml(address(shipping) || 'אין כתובת משלוח')}</p><p>אמצעי תשלום: ${escapeHtml(order.payment_method_title || '—')}</p><p>משלוח: ${escapeHtml((order.shipping_lines || []).map(x => x.method_title).join(', ') || '—')}</p><p>הערת לקוח: ${escapeHtml(order.customer_note || '—')}</p></div></div><div class="order-detail-box"><h4>פריטים שהוזמנו</h4><table class="order-lines"><thead><tr><th>שם המוצר</th><th>כמות</th><th>סכום</th></tr></thead><tbody>${lines || '<tr><td colspan="3">אין פריטים להצגה</td></tr>'}${fees}</tbody></table><div class="order-detail-total"><span>סכום ההזמנה</span><span>${formatILS(order.total || 0)}</span></div><div class="order-detail-total"><span>הוחזר ללקוח</span><span>${formatILS(order.total_refunded || 0)}</span></div><div class="order-detail-total"><span>סטטוס נוכחי</span><span>${escapeHtml(ORDER_STATUS_LABELS[order.status] || order.status)}</span></div><div class="order-status-editor"><label for="orderModalStatus">שינוי סטטוס</label><select id="orderModalStatus" class="order-status-select">${orderStatusOptions(order.status)}</select><button type="button" class="btn btn-primary btn-sm" data-order-save-modal="${Number(order.id)}">שמירת סטטוס</button></div><div class="order-sub">נוצרה: ${escapeHtml(formatDate(order.date_created))} · מספר מזהה: ${Number(order.id)}</div></div>`;
+    $('orderModalTitle').textContent = 'הזמנה #' + (order.number || order.id);
+    $('deleteOrderFromModal').dataset.orderDelete = String(Number(order.id));
+    $('orderModal').classList.add('open'); document.body.classList.add('no-scroll');
+  }
+  async function deleteOrderPermanently(id) {
+    const order = state.orders.find(o => Number(o.id) === Number(id));
+    if (!order) { showToast('ההזמנה כבר אינה ברשימה. רענן את ההזמנות.', 'error'); return false; }
+    const orderNumber = order.number || order.id;
+    const accepted = confirm(`מחיקה לצמיתות של הזמנה #${orderNumber}?\n\nהפעולה תשלח DELETE ל־WooCommerce עם force=true, תמחק את ההזמנה מהחנות ולא ניתן יהיה לשחזר אותה דרך האשפה.\n\nלהמשיך?`);
+    if (!accepted) return false;
+    try {
+      await wooRequest('/orders/' + encodeURIComponent(order.id) + '?force=true', { method: 'DELETE' });
+      state.orders = state.orders.filter(item => Number(item.id) !== Number(order.id));
+      if (state.selectedOrder && Number(state.selectedOrder.id) === Number(order.id)) {
+        $('orderModal').classList.remove('open'); document.body.classList.remove('no-scroll'); state.selectedOrder = null;
+      }
+      renderOrders(); refreshHomeSummary({ silent: true });
+      showToast('ההזמנה #' + orderNumber + ' נמחקה לצמיתות מ־WooCommerce.', 'success');
+      if (state.analyticsLoaded) refreshAnalytics({ silent: true });
+      return true;
+    } catch (err) {
+      showToast('מחיקת ההזמנה נכשלה: ' + (err.message || 'שגיאת שרת'), 'error');
+      return false;
+    }
   }
   function exportOrdersCsv() {
     if (!state.ordersLoaded || !state.orders.length) { showToast('אין הזמנות שיוצאו. טען תחילה את ההזמנות.', 'error'); return; }
@@ -1170,7 +1382,7 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
   function clearLocalSettings() {
     if (!confirm('למחוק מהדפדפן את כתובת החנות וכל פרטי החיבור השמורים? פעולה זו לא מוחקת מוצרים ב־WooCommerce.')) return;
     try { localStorage.removeItem(STORAGE_KEY); } catch {}
-    state.settings = { storeUrl: '', consumerKey: '', consumerSecret: '', wpUsername: '', wpAppPassword: '' }; state.products = []; state.categories = []; state.categoriesLoaded = false; state.hasLoaded = false; state.orders = []; state.ordersLoaded = false; state.analytics = null; state.analyticsLoaded = false; state.analyticsLoading = false; state.homeSummary = null; state.homeSummaryLoaded = false; state.homeSummaryLoading = false; state.homeSummaryLastSyncAt = 0; state.orderLoading = false; state.connected = false; state.authBlocked = false; state.lastAuthError = ''; state.lastSyncAt = 0; state.ordersLastSyncAt = 0; state.analyticsLastSyncAt = 0;
+    state.settings = { storeUrl: '', consumerKey: '', consumerSecret: '', wpUsername: '', wpAppPassword: '', wooAuthMode: 'auto' }; state.wooAuthResolved = null; state.products = []; state.categories = []; state.categoriesLoaded = false; state.hasLoaded = false; state.orders = []; state.ordersLoaded = false; state.analytics = null; state.analyticsLoaded = false; state.analyticsLoading = false; state.homeSummary = null; state.homeSummaryLoaded = false; state.homeSummaryLoading = false; state.homeSummaryLastSyncAt = 0; state.orderLoading = false; state.connected = false; state.authBlocked = false; state.lastAuthError = ''; state.lastSyncAt = 0; state.ordersLastSyncAt = 0; state.analyticsLastSyncAt = 0;
     fillSettingsForm(); setConnectionPill(false); renderProducts(); renderCategories(); renderOrders(); renderAnalytics(); renderHomeSummary(); $('settingsStatus').textContent = 'פרטי החיבור נמחקו מהדפדפן.'; showToast('פרטי החיבור המקומיים נמחקו.', 'success');
   }
   function registerPwa() {
@@ -1192,8 +1404,10 @@ ${uses ? `לפי WooCommerce יש בקטגוריה ${uses} מוצרים. ` : ''}
     $('refreshProducts').addEventListener('click', () => { state.authBlocked = false; refreshProducts({ manual: true }); }); $('addProduct').addEventListener('click', () => openProductModal());
     $('refreshHome').addEventListener('click', () => refreshHomeSummary()); $('homeBannerSettings').addEventListener('click', () => showView('settings'));
     $('refreshAnalytics').addEventListener('click', () => refreshAnalytics()); $('analyticsPeriod').addEventListener('change', () => refreshAnalytics());
-    $('refreshOrders').addEventListener('click', () => refreshOrders()); $('orderSearch').addEventListener('input', renderOrders); $('orderStatusFilter').addEventListener('change', () => refreshOrders()); $('exportOrdersCsv').addEventListener('click', exportOrdersCsv);
-    $('ordersTableWrap').addEventListener('click', e => { const detail = e.target.closest('[data-order-details]'); const save = e.target.closest('[data-order-save]'); if (detail) openOrderDetails(state.orders.find(o => Number(o.id) === Number(detail.dataset.orderDetails))); if (save) saveOrderStatus(save.dataset.orderSave); });
+    $('refreshOrders').addEventListener('click', () => refreshOrders()); $('loadMoreOrders').addEventListener('click', loadMoreOrders); $('orderSearch').addEventListener('input', renderOrders); $('orderStatusFilter').addEventListener('change', renderOrders); $('exportOrdersCsv').addEventListener('click', exportOrdersCsv);
+    $('ordersTableWrap').addEventListener('click', e => { const detail = e.target.closest('[data-order-details]'); const save = e.target.closest('[data-order-save]'); const del = e.target.closest('[data-order-delete]'); if (detail) openOrderDetails(state.orders.find(o => Number(o.id) === Number(detail.dataset.orderDetails))); if (save) saveOrderStatus(save.dataset.orderSave); if (del) deleteOrderPermanently(del.dataset.orderDelete); });
+    $('orderModalBody').addEventListener('click', e => { const save = e.target.closest('[data-order-save-modal]'); if (save) saveOrderStatus(save.dataset.orderSaveModal, $('orderModalStatus')); });
+    $('deleteOrderFromModal').addEventListener('click', e => deleteOrderPermanently(e.currentTarget.dataset.orderDelete));
     $('importSettings').addEventListener('click', importSettings);
     $('chooseSettingsFile').addEventListener('click', () => $('settingsImportFile').click());
     $('settingsImportFile').addEventListener('change', e => { const file = e.target.files && e.target.files[0]; readSettingsFile(file); e.target.value = ''; });
